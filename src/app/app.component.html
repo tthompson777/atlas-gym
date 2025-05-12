@@ -1,0 +1,36 @@
+<mat-sidenav-container class="sidenav-container" autosize>
+
+  <mat-sidenav #drawer mode="side" class="app-sidenav" (opened)="true">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" (click)="drawer.close()">Dashboard</a>
+      <a mat-list-item routerLink="/alunos" (click)="drawer.close()">Alunos</a>
+      <a mat-list-item routerLink="/login" (click)="drawer.close()">Sair</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar color="primary" class="app-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="app-title">🏋️ Atlas Gym</span>
+      <span class="spacer"></span>
+
+      <mat-slide-toggle (change)="toggleTheme()">Dark Mode</mat-slide-toggle>
+    </mat-toolbar>
+
+    <div class="app-container">
+      <router-outlet></router-outlet>
+    </div>
+
+    <mat-toolbar color="primary" class="app-footer" role="contentinfo">
+      <span>&copy; {{ currentYear }} Atlas Gym</span>
+      <span class="spacer"></span>
+      <span>v1.0.0</span>
+    </mat-toolbar>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

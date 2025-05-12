@@ -1,0 +1,25 @@
+<h2>Alunos</h2>
+<button routerLink="/alunos/novo">Novo Aluno</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>CPF</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let aluno of alunos">
+      <td>{{ aluno.nome }}</td>
+      <td>{{ aluno.cpf }}</td>
+      <td>{{ aluno.status }}</td>
+      <td>
+        <button (click)="editar(aluno.id)">Editar</button>
+        <button (click)="inativar(aluno.id)" [disabled]="aluno.status === 'inativo'">Inativar</button>
+        <button (click)="excluir(aluno.id)">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

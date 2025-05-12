@@ -1,0 +1,66 @@
+<mat-card>
+  <h2>{{ editando ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
+
+  <form (ngSubmit)="salvar()" class="formulario">
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Nome</mat-label>
+      <input matInput [(ngModel)]="aluno.nome" name="nome" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Sexo</mat-label>
+      <input matInput [(ngModel)]="aluno.sexo" name="sexo" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Data de Nascimento</mat-label>
+      <input matInput [(ngModel)]="aluno.nascimento" name="nascimento" type="date" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Telefone</mat-label>
+      <input matInput [(ngModel)]="aluno.telefone" name="telefone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>E-mail</mat-label>
+      <input matInput [(ngModel)]="aluno.email" name="email" type="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>CPF</mat-label>
+      <input matInput [(ngModel)]="aluno.cpf" name="cpf" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Rua</mat-label>
+      <input matInput [(ngModel)]="aluno.rua" name="rua" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Número</mat-label>
+      <input matInput [(ngModel)]="aluno.numero" name="numero" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Bairro</mat-label>
+      <input matInput [(ngModel)]="aluno.bairro" name="bairro" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>Cidade</mat-label>
+      <input matInput [(ngModel)]="aluno.cidade" name="cidade" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo">
+      <mat-label>País</mat-label>
+      <input matInput [(ngModel)]="aluno.pais" name="pais" />
+    </mat-form-field>
+
+    <div class="botoes">
+      <button mat-raised-button color="primary" type="submit">Salvar</button>
+    </div>
+
+  </form>
+</mat-card>
