@@ -43,10 +43,4 @@ export class AppComponent {
 
   darkMode = false;
   currentYear = new Date().getFullYear();
-
-  toggleTheme(): void {
-    this.darkMode = !this.darkMode;
-    const body = document.body;
-    body.classList.toggle('dark-theme', this.darkMode);
-  }
 }

@@ -18,6 +18,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { getPtBrPaginatorIntl } from './app/shared/mat-paginator-intl-pt';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -38,6 +41,9 @@ bootstrapApplication(AppComponent, {
       ReactiveFormsModule,
       MatSidenavModule,
       MatSlideToggleModule,
-    )
+      MatTooltipModule,
+      MatPaginatorModule
+    ),
+    { provide: MatPaginatorIntl, useValue: getPtBrPaginatorIntl() }
   ]
 });

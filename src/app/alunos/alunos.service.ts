@@ -14,7 +14,7 @@ export interface Aluno {
   bairro?: string;
   cidade?: string;
   pais?: string;
-  status: 'ativo' | 'inativo';
+  status: 'Ativo' | 'Inativo';
 }
 
 @Injectable({ providedIn: 'root' })

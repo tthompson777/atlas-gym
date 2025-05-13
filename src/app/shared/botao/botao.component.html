@@ -1,0 +1,7 @@
+<ng-container>
+
+  <button [ngClass]="[classe, 'btn-' + tamanho]" [disabled]="disableClick" (click)="clicou.emit()">
+    <mat-icon *ngIf="icone">{{ icone }}</mat-icon> <span *ngIf="texto" class="ml-2">{{ texto }}</span>
+  </button>
+
+</ng-container>

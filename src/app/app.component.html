@@ -15,13 +15,11 @@
       <button mat-icon-button (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <span class="app-title">🏋️ Atlas Gym</span>
+      <span class="app-title">Atlas Gym</span>
       <span class="spacer"></span>
-
-      <mat-slide-toggle (change)="toggleTheme()">Dark Mode</mat-slide-toggle>
     </mat-toolbar>
 
-    <div class="app-container">
+    <div class="container app-container">
       <router-outlet></router-outlet>
     </div>
 

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlunosService, Aluno } from '../alunos.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   selector: 'app-formulario',
   standalone: true,
   imports: [
+    RouterModule,
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -41,7 +41,7 @@ export class FormularioComponent {
     bairro: '',
     cidade: '',
     pais: '',
-    status: 'ativo',
+    status: 'Ativo',
   };
 
   editando = false;
