@@ -9,6 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { WebcamImage } from 'ngx-webcam';
+import { Subject, Observable } from 'rxjs';
+import { NgIf } from '@angular/common';
+import { WebcamModule } from 'ngx-webcam';
 
 @Component({
   selector: 'app-formulario',
@@ -22,13 +26,20 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatTableModule,
     MatIconModule,
     MatToolbarModule,
+    NgIf,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    WebcamModule,
   ],
   templateUrl: './formulario.component.html',
 })
 export class FormularioComponent {
+  trigger: Subject<void> = new Subject<void>();
+  webcamImage?: WebcamImage;
+  triggerObservable: Observable<void> = this.trigger.asObservable();
+
   aluno: Aluno = {
+    fotoBase64: '',
     id: 0,
     nome: '',
     sexo: '',
@@ -61,6 +72,11 @@ export class FormularioComponent {
       });
     }
   }
+
+  captureImage(webcamImage: WebcamImage): void {
+  this.webcamImage = webcamImage;
+  this.aluno.fotoBase64 = webcamImage.imageAsDataUrl; // base64 para enviar ao backend
+}
 
   salvar() {
   if (this.editando) {

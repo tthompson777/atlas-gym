@@ -27,6 +27,7 @@ export class ListaComponent implements OnInit {
   dataSource = new MatTableDataSource<Aluno>([]);
   alunos: Aluno[] = [];
   colunas: string[] = [
+    'foto',
     'id',
     'nome',
     'sexo',

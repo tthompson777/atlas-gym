@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface Aluno {
+  fotoBase64: string;
   id: number;
   nome: string;
   sexo: string;

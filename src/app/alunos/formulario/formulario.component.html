@@ -1,6 +1,21 @@
 <mat-card>
   <h2>{{ editando ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
 
+  <div class="my-3">
+  <webcam 
+    [trigger]="triggerObservable" 
+    (imageCapture)="captureImage($event)" 
+    [videoOptions]="{ width: 320, height: 240 }"
+    [allowCameraSwitch]="false">
+  </webcam>
+
+  <button mat-raised-button color="primary" (click)="trigger.next()">Tirar Foto</button>
+
+  <div *ngIf="webcamImage" class="mt-3">
+    <img [src]="webcamImage.imageAsDataUrl" alt="Foto capturada" width="200" />
+  </div>
+</div>
+
   <form (ngSubmit)="salvar()" class="formulario">
 
     <mat-form-field appearance="outline" class="campo">

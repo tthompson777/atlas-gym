@@ -16,6 +16,13 @@
     <table mat-table [dataSource]="dataSource"
     class="mat-elevation-z2 striped-table">
 
+    <ng-container matColumnDef="foto">
+      <th mat-header-cell *matHeaderCellDef> Foto </th>
+      <td mat-cell *matCellDef="let aluno">
+        <img *ngIf="aluno.fotoBase64" [src]="aluno.fotoBase64" alt="Foto" width="48" height="48" style="border-radius: 10px;" />
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID </th>
       <td mat-cell *matCellDef="let aluno"> {{ aluno.id }} </td>
