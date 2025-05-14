@@ -15,6 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import * as faceapi from 'face-api.js';
+import { FaceRecognitionService } from '../../services/face-recognition.service';
 
 @Component({
   selector: 'app-alunos',
@@ -40,7 +42,7 @@ export class ListaComponent implements OnInit {
   ];
   filtro: string = '';
 
-  constructor(private alunosService: AlunosService, private router: Router, private dialog: MatDialog) {}
+  constructor(private alunosService: AlunosService, private router: Router, private dialog: MatDialog, private faceRecognition: FaceRecognitionService) {}
 
   ngOnInit() {
     this.carregar();
@@ -50,6 +52,14 @@ export class ListaComponent implements OnInit {
       const cpf = data.cpf.toLowerCase();
       return nome.includes(filtro) || cpf.includes(filtro);
     };
+
+    // Carrega os modelos na inicialização
+  this.faceRecognition.loadModels().then(() => {
+    console.log('Modelos carregados com sucesso');
+  }).catch(err => {
+    console.error('Erro ao carregar modelos:', err);
+  });
+
   }
 
   carregar(): void {

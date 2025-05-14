@@ -1,0 +1,10 @@
+<div style="text-align: center;">
+  <h2>Reconhecimento Facial</h2>
+  <video #video width="640" height="480" autoplay muted></video>
+  <canvas #overlay style="position: absolute; top: 0; left: 0;"></canvas>
+  <br />
+  <button [disabled]="!modelosCarregados" (click)="verificar()">Verificar</button>
+  <div *ngIf="alunoReconhecido">
+    <p><strong>Aluno reconhecido:</strong> {{ alunoReconhecido.nome }}</p>
+  </div>
+</div>

@@ -15,6 +15,7 @@ export interface Aluno {
   bairro?: string;
   cidade?: string;
   pais?: string;
+  descriptor?: number[];
   status: 'Ativo' | 'Inativo';
 }
 
@@ -47,4 +48,8 @@ export class AlunosService {
   inativar(id: number) {
     return this.http.patch<Aluno>(`${this.API}/${id}/inativar`, {});
   }
+
+  registrarEntrada(alunoId: number) {
+  return this.http.post('/api/entradas', { alunoId });
+}
 }

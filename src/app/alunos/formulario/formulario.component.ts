@@ -13,6 +13,7 @@ import { WebcamImage } from 'ngx-webcam';
 import { Subject, Observable } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { WebcamModule } from 'ngx-webcam';
+import * as faceapi from 'face-api.js';
 
 @Component({
   selector: 'app-formulario',
@@ -78,7 +79,15 @@ export class FormularioComponent {
   this.aluno.fotoBase64 = webcamImage.imageAsDataUrl; // base64 para enviar ao backend
 }
 
-  salvar() {
+async salvar() {
+  // Gera o descriptor apenas se houver uma imagem capturada
+  if (this.webcamImage) {
+    const descriptor = await this.gerarDescriptor(this.webcamImage.imageAsDataUrl);
+    if (descriptor) {
+      this.aluno.descriptor = Array.from(descriptor); // transforma Float32Array em array simples
+    }
+  }
+
   if (this.editando) {
     this.alunosService.atualizar(this.aluno).subscribe(() => {
       this.router.navigate(['/alunos']);
@@ -89,5 +98,23 @@ export class FormularioComponent {
     });
   }
 }
+
+async gerarDescriptor(fotoBase64: string): Promise<Float32Array | null> {
+  await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models/tiny_face_detector');
+  await faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models/face_landmark_68');
+  await faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models/face_recognition');
+
+  const img = new Image();
+  img.src = fotoBase64;
+  await new Promise((res) => (img.onload = res));
+
+  const detection = await faceapi
+    .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks()
+    .withFaceDescriptor();
+
+  return detection?.descriptor || null;
+}
+
 
 }
