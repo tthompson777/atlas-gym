@@ -18,6 +18,8 @@
 
   <form (ngSubmit)="salvar()" class="formulario">
 
+    <img *ngIf="aluno.fotoBase64" [src]="aluno.fotoBase64" width="200" />
+
     <mat-form-field appearance="outline" class="campo">
       <mat-label>Nome</mat-label>
       <input matInput [(ngModel)]="aluno.nome" name="nome" required />
@@ -73,9 +75,13 @@
       <input matInput [(ngModel)]="aluno.pais" name="pais" />
     </mat-form-field>
 
-    <div class="botoes">
+    <!-- <div class="botoes">
       <button mat-raised-button color="primary" type="submit">Salvar</button>
-    </div>
+    </div> -->
+
+    <button mat-raised-button color="primary" [disabled]="!aluno.fotoBase64" (click)="salvar()">
+      Salvar
+    </button>
 
   </form>
 </mat-card>

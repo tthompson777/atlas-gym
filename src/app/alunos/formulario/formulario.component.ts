@@ -80,11 +80,15 @@ export class FormularioComponent {
 }
 
 async salvar() {
-  // Gera o descriptor apenas se houver uma imagem capturada
+  if (!this.aluno.fotoBase64) {
+    alert('Por favor, capture uma foto do aluno antes de salvar.');
+    return;
+  }
+
   if (this.webcamImage) {
     const descriptor = await this.gerarDescriptor(this.webcamImage.imageAsDataUrl);
     if (descriptor) {
-      this.aluno.descriptor = Array.from(descriptor); // transforma Float32Array em array simples
+      this.aluno.descriptor = Array.from(descriptor);
     }
   }
 
@@ -115,6 +119,5 @@ async gerarDescriptor(fotoBase64: string): Promise<Float32Array | null> {
 
   return detection?.descriptor || null;
 }
-
 
 }
