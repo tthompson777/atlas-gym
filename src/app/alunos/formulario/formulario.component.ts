@@ -13,6 +13,7 @@ import { WebcamImage } from 'ngx-webcam';
 import { Subject, Observable } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { WebcamModule } from 'ngx-webcam';
+import { MatSnackBar } from '@angular/material/snack-bar'
 import * as faceapi from 'face-api.js';
 
 @Component({
@@ -61,7 +62,8 @@ export class FormularioComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private alunosService: AlunosService
+    private alunosService: AlunosService,
+    private snackBar: MatSnackBar
   ) {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -79,9 +81,18 @@ export class FormularioComponent {
   this.aluno.fotoBase64 = webcamImage.imageAsDataUrl; // base64 para enviar ao backend
 }
 
+private mostrarMensagem(mensagem: string) {
+  this.snackBar.open(mensagem, 'Fechar', {
+    duration: 4000,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    panelClass: ['snack-danger']
+  });
+}
+
 async salvar() {
   if (!this.aluno.fotoBase64) {
-    alert('Por favor, capture uma foto do aluno antes de salvar.');
+    this.mostrarMensagem('Por favor, capture uma foto do aluno antes de salvar.');
     return;
   }
 
@@ -92,15 +103,34 @@ async salvar() {
     }
   }
 
-  if (this.editando) {
-    this.alunosService.atualizar(this.aluno).subscribe(() => {
+  this.alunosService.listar().subscribe((alunos) => {
+    const cpfJaExiste = alunos.some(
+      (a) => a.cpf === this.aluno.cpf && (!this.editando || a.id !== this.aluno.id)
+    );
+
+    const emailJaExiste = alunos.some(
+      (a) => a.email === this.aluno.email && (!this.editando || a.id !== this.aluno.id)
+    );
+
+    if (cpfJaExiste) {
+      this.mostrarMensagem('Já existe um aluno cadastrado com este CPF.');
+      return;
+    }
+
+    if (emailJaExiste) {
+      this.mostrarMensagem('Já existe um aluno cadastrado com este e-mail.');
+      return;
+    }
+
+    // Se não encontrou CPF/email duplicado, segue com salvar
+    const request = this.editando
+      ? this.alunosService.atualizar(this.aluno)
+      : this.alunosService.criar(this.aluno);
+
+    request.subscribe(() => {
       this.router.navigate(['/alunos']);
     });
-  } else {
-    this.alunosService.criar(this.aluno).subscribe(() => {
-      this.router.navigate(['/alunos']);
-    });
-  }
+  });
 }
 
 async gerarDescriptor(fotoBase64: string): Promise<Float32Array | null> {

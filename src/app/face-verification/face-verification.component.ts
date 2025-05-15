@@ -125,7 +125,7 @@ export class FaceVerificationComponent implements OnInit {
             duration: 6000,
             panelClass: [
               'snack-centralizado',
-              alunoLiberado ? 'snack-liberado' : 'snack-inativo'
+              alunoLiberado ? 'snack-liberado' : 'snack-danger'
             ]
           });
 
@@ -196,7 +196,7 @@ export class FaceVerificationComponent implements OnInit {
         duration: 6000,
         panelClass: [
           'snack-centralizado',
-          alunoLiberado ? 'snack-liberado' : 'snack-inativo'
+          alunoLiberado ? 'snack-liberado' : 'snack-danger'
         ]
       });
 

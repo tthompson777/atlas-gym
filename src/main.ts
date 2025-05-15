@@ -21,6 +21,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPtBrPaginatorIntl } from './app/shared/mat-paginator-intl-pt';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -42,7 +43,8 @@ bootstrapApplication(AppComponent, {
       MatSidenavModule,
       MatSlideToggleModule,
       MatTooltipModule,
-      MatPaginatorModule
+      MatPaginatorModule,
+      MatSnackBarModule
     ),
     { provide: MatPaginatorIntl, useValue: getPtBrPaginatorIntl() }
   ]
