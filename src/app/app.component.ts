@@ -1,5 +1,6 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { FirebaseTokenInterceptor } from './core/interceptors/firebase-token.interceptor';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -31,16 +33,23 @@ import { MatListModule } from '@angular/material/list';
       MatIconModule,
       FormsModule,
       ReactiveFormsModule,
-      MatListModule],
+      MatListModule,
+      NgClass,
+      NgIf
+    ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: FirebaseTokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: FirebaseTokenInterceptor, multi: true, }
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'Atlas GYM - Gerenciador de Academia';
+  constructor(public router: Router) {}
 
-  darkMode = false;
+  title = 'Atlas GYM - Gerenciador de Academia';
   currentYear = new Date().getFullYear();
+
+  isVerificarPage() {
+  return this.router.url === '/verificar';
+}
 }

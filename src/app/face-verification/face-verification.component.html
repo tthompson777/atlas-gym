@@ -1,10 +1,26 @@
-<div style="text-align: center;">
-  <h2>Reconhecimento Facial</h2>
-  <video #video width="640" height="480" autoplay muted></video>
-  <canvas #overlay style="position: absolute; top: 0; left: 0;"></canvas>
-  <br />
-  <button [disabled]="!modelosCarregados" (click)="verificar()">Verificar</button>
-  <div *ngIf="alunoReconhecido">
-    <p><strong>Aluno reconhecido:</strong> {{ alunoReconhecido.nome }}</p>
+<mat-card class="card-reconhecimento">
+  <h2 class="titulo">Reconhecimento Facial</h2>
+
+  <div class="video-container">
+    <div *ngIf="contadorProximoAluno !== null" class="contador">
+      <mat-icon color="accent">hourglass_bottom</mat-icon>
+      <span>Aguardando próximo aluno em: {{ contadorProximoAluno }}…</span>
+    </div>
+    <video #video width="640" height="480" autoplay muted></video>
+    <div class="silhueta"></div>
   </div>
-</div>
+
+  <div class="acoes">
+    <!-- <app-botao tamanho="sm" classe="btn-laranja mr-2" texto="Verificar" icone="eye"
+      (clicou)="verificar()">
+    </app-botao> -->
+    <app-botao tamanho="sm" classe="btn-laranja mr-2" texto="Reniciar Verificação" icone="refresh"
+      (clicou)="reiniciarVerificacao()">
+    </app-botao>
+  </div>
+
+  <div *ngIf="alunoReconhecido" class="resultado">
+    <mat-icon color="primary">check_circle</mat-icon>
+    <span><strong>Aluno reconhecido:</strong> {{ alunoReconhecido.nome }}</span>
+  </div>
+</mat-card>

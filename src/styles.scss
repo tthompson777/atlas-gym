@@ -48,6 +48,9 @@ h3,
 h4,
 h5,
 h6,
+.mdc-snackbar__surface,
+.mdc-snackbar__label,
+.mdc-snackbar,
 mat-dialog-content,
 mat-dialog-title,
 mat-tooltip,
@@ -57,9 +60,8 @@ mat-paginator {
   font-family: 'Comfortaa', sans-serif !important;
 }
 
-.mat-mdc-dialog-surface {
-  border-left: 10px solid #e67e21 !important;
-  border-radius: 4px !important;
+.foto-preview-dialog .mat-mdc-dialog-surface {
+  border-left: 0 !important;
 }
 
 .mat-mdc-cell,
@@ -558,4 +560,39 @@ button {
   & mat-icon {
     font-size: 1.5rem;
   }
+}
+
+.snack-centralizado {
+  display: flex;
+  justify-content: center;
+  margin: auto !important;
+  position: fixed !important;
+  top: 40%;
+  left: 0;
+  right: 0;
+  z-index: 1500;
+  transform: translateY(-50%);
+}
+
+.snack-liberado .mdc-snackbar__surface {
+  border-left: 10px solid #20c997 !important;
+}
+.snack-inativo .mdc-snackbar__surface {
+  border-left: 10px solid #f44336 !important;
+}
+
+.mdc-snackbar__surface {
+  border-left: 10px solid #e67e21 !important;
+  background-color: white !important;
+  border-radius: 4px !important;
+  color: #2e2e2e !important;
+}
+
+
+.bg-verificar {
+  background-image: url('/assets/bg-verificar.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh !important;
 }

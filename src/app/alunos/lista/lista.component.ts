@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import * as faceapi from 'face-api.js';
 import { FaceRecognitionService } from '../../services/face-recognition.service';
+import { FotoPreviewComponent } from '../../shared/foto-preview/foto-preview.component';
 
 @Component({
   selector: 'app-alunos',
@@ -27,6 +28,7 @@ import { FaceRecognitionService } from '../../services/face-recognition.service'
 export class ListaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Aluno>([]);
+  hoverDialogRef: any;
   alunos: Aluno[] = [];
   colunas: string[] = [
     'foto',
@@ -42,23 +44,23 @@ export class ListaComponent implements OnInit {
   ];
   filtro: string = '';
 
-  constructor(private alunosService: AlunosService, private router: Router, private dialog: MatDialog, private faceRecognition: FaceRecognitionService) {}
+  constructor(private alunosService: AlunosService, private router: Router, private dialog: MatDialog, private faceRecognition: FaceRecognitionService) { }
 
   ngOnInit() {
     this.carregar();
 
-      this.dataSource.filterPredicate = (data: Aluno, filtro: string) => {
+    this.dataSource.filterPredicate = (data: Aluno, filtro: string) => {
       const nome = data.nome.toLowerCase();
       const cpf = data.cpf.toLowerCase();
       return nome.includes(filtro) || cpf.includes(filtro);
     };
 
     // Carrega os modelos na inicialização
-  this.faceRecognition.loadModels().then(() => {
-    console.log('Modelos carregados com sucesso');
-  }).catch(err => {
-    console.error('Erro ao carregar modelos:', err);
-  });
+    this.faceRecognition.loadModels().then(() => {
+      console.log('Modelos carregados com sucesso');
+    }).catch(err => {
+      console.error('Erro ao carregar modelos:', err);
+    });
 
   }
 
@@ -122,7 +124,23 @@ export class ListaComponent implements OnInit {
   }
 
   aplicarFiltro(): void {
-  this.dataSource.filter = this.filtro.trim().toLowerCase();
-}
+    this.dataSource.filter = this.filtro.trim().toLowerCase();
+  }
+
+  abrirPreview(foto: string) {
+    this.hoverDialogRef = this.dialog.open(FotoPreviewComponent, {
+      data: { foto },
+      panelClass: 'foto-preview-dialog',
+      hasBackdrop: false,
+      position: { top: '100px', left: '100px' }
+    });
+  }
+
+  fecharPreview() {
+    if (this.hoverDialogRef) {
+      this.hoverDialogRef.close();
+      this.hoverDialogRef = null;
+    }
+  }
 
 }

@@ -1,27 +1,36 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import * as faceapi from 'face-api.js';
 import { FaceRecognitionService } from '../services/face-recognition.service';
 import { AlunosService, Aluno } from '../alunos/alunos.service';
 import { NgIf } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { BoasVindasSnackbarComponent } from '../shared/boas-vindas-snackbar/boas-vindas-snackbar.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { BotaoComponent } from '../shared/botao/botao.component';
 
 @Component({
   selector: 'app-face-verification',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, MatSnackBarModule, MatCardModule, MatButtonModule, MatIconModule, BotaoComponent],
   templateUrl: './face-verification.component.html',
+  styleUrls: ['./face-verification.component.scss'],
 })
 export class FaceVerificationComponent implements OnInit {
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
-  @ViewChild('overlay') canvasRef!: ElementRef<HTMLCanvasElement>;
 
+  contadorProximoAluno: number | null = null;
+  verificacaoAutomaticaAtiva = false;
   descriptorsSalvos: { aluno: Aluno, descriptor: Float32Array }[] = [];
   alunoReconhecido: Aluno | null = null;
   modelosCarregados = false;
+  alunoInativo = false;
 
   constructor(
     private face: FaceRecognitionService,
-    private alunosService: AlunosService
-  ) {}
+    private alunosService: AlunosService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   async ngOnInit() {
     await this.face.loadModels();
@@ -29,9 +38,11 @@ export class FaceVerificationComponent implements OnInit {
     await this.iniciarCamera();
 
     this.videoRef.nativeElement.addEventListener('canplay', () => {
-    console.log('Câmera pronta!');
-  });
+      console.log('Câmera pronta!');
+    });
     this.carregarBaseDeAlunos();
+
+    this.iniciarVerificacaoAutomatica();
   }
 
   async iniciarCamera() {
@@ -41,19 +52,114 @@ export class FaceVerificationComponent implements OnInit {
   }
 
   carregarBaseDeAlunos() {
-  this.alunosService.listar().subscribe((alunos: any) => {
-    for (const aluno of alunos) {
-      if (aluno.descriptor) {
-        this.descriptorsSalvos.push({ aluno, descriptor: new Float32Array(aluno.descriptor) });
+    this.alunosService.listar().subscribe((alunos: any) => {
+      for (const aluno of alunos) {
+        if (aluno.descriptor) {
+          this.descriptorsSalvos.push({ aluno, descriptor: new Float32Array(aluno.descriptor) });
+        }
       }
+      console.log(this.descriptorsSalvos);
+    });
+  }
+
+  iniciarContadorReinicio() {
+  this.contadorProximoAluno = 5;
+
+  const intervalo = setInterval(() => {
+    if (this.contadorProximoAluno! > 1) {
+      this.contadorProximoAluno!--;
+    } else {
+      clearInterval(intervalo);
+      this.contadorProximoAluno = null;
+      this.alunoReconhecido = null;
+      this.verificacaoAutomaticaAtiva = false;
+      this.iniciarVerificacaoAutomatica();
     }
-    console.log(this.descriptorsSalvos);
-  });
+  }, 1000);
 }
 
+
+  iniciarVerificacaoAutomatica() {
+    if (this.verificacaoAutomaticaAtiva || this.alunoReconhecido || this.contadorProximoAluno !== null) return;
+
+    this.verificacaoAutomaticaAtiva = true;
+
+    const intervalo = setInterval(async () => {
+      if (!this.verificacaoAutomaticaAtiva || this.alunoReconhecido || this.contadorProximoAluno !== null) {
+        clearInterval(intervalo);
+        return;
+      }
+
+      const video = this.videoRef.nativeElement;
+
+      const detection = await this.face.detectFace(video);
+
+      if (detection) {
+
+        const entradaDescriptor = detection.descriptor;
+        let menorDistancia = 1;
+        let alunoMaisProvavel: Aluno | null = null;
+
+        for (const registro of this.descriptorsSalvos) {
+          const dist = this.face.computeDistance(entradaDescriptor, registro.descriptor);
+          if (dist < menorDistancia && dist < 0.6) {
+            menorDistancia = dist;
+            alunoMaisProvavel = registro.aluno;
+          }
+        }
+
+        if (alunoMaisProvavel) {
+          this.verificacaoAutomaticaAtiva = false;
+          this.alunoReconhecido = alunoMaisProvavel;
+
+          const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';
+
+          const snackRef = this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+            data: {
+              nome: alunoMaisProvavel.nome,
+              foto: alunoMaisProvavel.fotoBase64,
+              mensagem: alunoLiberado
+                ? 'Que bom que você veio!'
+                : 'Procure o atendimento para mais informações!'
+            },
+            duration: 6000,
+            panelClass: [
+              'snack-centralizado',
+              alunoLiberado ? 'snack-liberado' : 'snack-inativo'
+            ]
+          });
+
+          // Quando o snackbar desaparecer, reinicia a verificação
+          snackRef.afterDismissed().subscribe(() => {
+            this.alunoReconhecido = null;
+            this.verificacaoAutomaticaAtiva = false;
+            this.iniciarVerificacaoAutomatica();
+            this.iniciarContadorReinicio();
+          });
+
+
+          if (alunoLiberado) {
+            this.alunosService.registrarEntrada(alunoMaisProvavel.id).subscribe({
+              next: () => console.log('Entrada registrada com sucesso!'),
+              error: err => console.error('Erro ao registrar entrada:', err)
+            });
+          }
+        }
+      }
+    }, 1000); // tenta a cada 1 segundo
+  }
+
+
+  reiniciarVerificacao() {
+    this.alunoReconhecido = null;
+    this.verificacaoAutomaticaAtiva = false;
+    this.iniciarVerificacaoAutomatica();
+  }
+
   async verificar() {
+    if (this.contadorProximoAluno !== null) return;
+    
     const video = this.videoRef.nativeElement;
-    const canvas = this.canvasRef.nativeElement;
     await new Promise(res => setTimeout(res, 200));
     const detection = await this.face.detectFace(video);
 
@@ -61,14 +167,6 @@ export class FaceVerificationComponent implements OnInit {
       alert('Nenhum rosto detectado!');
       return;
     }
-
-      // Ajusta canvas sobre o vídeo
-      faceapi.matchDimensions(canvas, video);
-      const resized = faceapi.resizeResults(detection, video);
-
-      // Desenha contornos
-      faceapi.draw.drawDetections(canvas, resized);
-      faceapi.draw.drawFaceLandmarks(canvas, resized);
 
     const entradaDescriptor = detection.descriptor;
     let menorDistancia = 1;
@@ -84,19 +182,33 @@ export class FaceVerificationComponent implements OnInit {
 
     if (alunoMaisProvavel) {
       this.alunoReconhecido = alunoMaisProvavel;
-      console.log('Aluno reconhecido:', alunoMaisProvavel.nome);
 
-      // REGISTRA A ENTRADA no banco:
-      this.alunosService.registrarEntrada(alunoMaisProvavel.id).subscribe({
-        next: () => {
-          console.log('Entrada registrada com sucesso!');
+      const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';
+
+      this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+        data: {
+          nome: alunoMaisProvavel.nome,
+          foto: alunoMaisProvavel.fotoBase64,
+          mensagem: alunoMaisProvavel.status?.toLowerCase() === 'inativo'
+            ? 'Procure o atendimento para mais informações!'
+            : 'Que bom que você veio!'
         },
-        error: (err) => {
-          console.error('Erro ao registrar entrada:', err);
-        }
+        duration: 6000,
+        panelClass: [
+          'snack-centralizado',
+          alunoLiberado ? 'snack-liberado' : 'snack-inativo'
+        ]
       });
-    } else {
-      alert('Aluno não reconhecido!');
+
+      if (alunoMaisProvavel.status?.toLowerCase() !== 'inativo') {
+        this.alunosService.registrarEntrada(alunoMaisProvavel.id).subscribe({
+          next: () => console.log('Entrada registrada com sucesso!'),
+          error: err => console.error('Erro ao registrar entrada:', err)
+        });
+      }
+    }
+    else {
+      this.alunoInativo = false;
       this.alunoReconhecido = null;
     }
   }

@@ -1,0 +1,88 @@
+.card-reconhecimento {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.titulo {
+  margin-bottom: 24px;
+  color: #e67e21;
+  font-weight: 600;
+}
+
+.video-container {
+  position: relative;
+  width: fit-content;
+  margin: auto;
+  border: 6px solid #e67e21;
+  border-radius: 12px;
+  overflow: hidden;
+
+  video,
+  canvas,
+  .silhueta {
+    display: block;
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  video {
+    position: relative;
+    z-index: 1;
+  }
+
+  canvas {
+    z-index: 2;
+  }
+
+  .silhueta {
+    z-index: 3;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/rosto.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.5;
+  }
+}
+
+.acoes {
+  margin-top: 24px;
+}
+
+.resultado {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.contador {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  z-index: 999999;
+  gap: 10px;
+  justify-content: center;
+  top: 40%;
+  left: 0;
+  right: 0;
+  z-index: 1500;
+  transform: translateY(-50%);
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+}
+

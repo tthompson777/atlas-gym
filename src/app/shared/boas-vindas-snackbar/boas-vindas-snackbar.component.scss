@@ -1,0 +1,23 @@
+.snack-content {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px;
+
+	& .foto {
+		width: 100px;
+		height: 100px;
+		border-radius: 8px;
+		object-fit: cover;
+	}
+
+	& .title {
+		font-size: 1rem;
+		font-weight: 700;
+	}
+	& .desc {
+		line-height: 1.5;
+		font-size: 1rem;
+		font-weight: normal;
+	}
+}
