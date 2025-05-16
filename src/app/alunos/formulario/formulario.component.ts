@@ -34,6 +34,7 @@ import * as faceapi from 'face-api.js';
     WebcamModule,
   ],
   templateUrl: './formulario.component.html',
+  styleUrls: ['./formulario.component.scss'],
 })
 export class FormularioComponent {
   trigger: Subject<void> = new Subject<void>();

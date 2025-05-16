@@ -590,11 +590,24 @@ button {
   color: #2e2e2e !important;
 }
 
-
+// Fundos para páginas
 .bg-verificar {
   background-image: url('/assets/bg-verificar.jpg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  min-height: 100vh !important;
+}
+.bg-alunos {
+  background-image: url('/assets/bg-alunos.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.box-shadow-none {
+  box-shadow: none !important;
+}
+.mat-icon-24 {
+  width: 24px !important;
+  height: 24px !important;  
 }

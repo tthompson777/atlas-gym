@@ -20,23 +20,23 @@ import { NgClass, NgIf } from '@angular/common';
   selector: 'app-root',
   standalone: true,
   imports: [
-      RouterModule,
-      RouterOutlet, 
-      MatToolbarModule, 
-      MatButtonModule, 
-      MatSidenavModule, 
-      MatSlideToggleModule, 
-      MatInputModule,
-      MatFormFieldModule,
-      MatCardModule,
-      MatTableModule,
-      MatIconModule,
-      FormsModule,
-      ReactiveFormsModule,
-      MatListModule,
-      NgClass,
-      NgIf
-    ],
+    RouterModule,
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatTableModule,
+    MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatListModule,
+    NgClass,
+    NgIf
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: FirebaseTokenInterceptor, multi: true, }
   ],
@@ -44,12 +44,15 @@ import { NgClass, NgIf } from '@angular/common';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  constructor(public router: Router) {}
+  constructor(public router: Router) { }
 
   title = 'Atlas GYM - Gerenciador de Academia';
   currentYear = new Date().getFullYear();
 
   isVerificarPage() {
-  return this.router.url === '/verificar';
-}
+    return this.router.url === '/verificar';
+  }
+  isAlunosPage() {
+    return this.router.url === '/alunos';
+  }
 }

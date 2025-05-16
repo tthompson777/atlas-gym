@@ -12,14 +12,14 @@
   <mat-sidenav-content>
 
     <mat-toolbar color="primary" class="app-toolbar" *ngIf="!isVerificarPage()">
-      <button mat-icon-button (click)="drawer.toggle()">
-        <mat-icon>menu</mat-icon>
+      <button mat-icon-button flat (click)="drawer.toggle()" class="box-shadow-none">
+        <mat-icon class="mat-icon-24">apps</mat-icon>
       </button>
       <span class="app-title">Atlas Gym</span>
       <span class="spacer"></span>
     </mat-toolbar>
 
-    <div class="app-container" [ngClass]="{ 'bg-verificar': isVerificarPage() }">
+    <div class="app-container" [ngClass]="{ 'bg-verificar': isVerificarPage(), 'bg-alunos': isAlunosPage() }">
       <router-outlet></router-outlet>
     </div>
 
@@ -29,6 +29,7 @@
       <span>v1.0.0</span>
     </mat-toolbar>
 
+    
   </mat-sidenav-content>
-
+  
 </mat-sidenav-container>
