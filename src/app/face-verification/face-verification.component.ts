@@ -8,17 +8,30 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { BotaoComponent } from '../shared/botao/botao.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-face-verification',
   standalone: true,
-  imports: [NgIf, MatSnackBarModule, MatCardModule, MatButtonModule, MatIconModule, BotaoComponent],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    NgIf, 
+    MatSnackBarModule, 
+    MatCardModule,
+    MatButtonModule, 
+    MatIconModule, 
+    BotaoComponent, 
+  ],
   templateUrl: './face-verification.component.html',
   styleUrls: ['./face-verification.component.scss'],
 })
 export class FaceVerificationComponent implements OnInit {
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
 
+  senhaDigitada: string = '';
   contadorProximoAluno: number | null = null;
   verificacaoAutomaticaAtiva = false;
   descriptorsSalvos: { aluno: Aluno, descriptor: Float32Array }[] = [];
@@ -211,5 +224,48 @@ export class FaceVerificationComponent implements OnInit {
       this.alunoInativo = false;
       this.alunoReconhecido = null;
     }
+  }  
+
+  verificarSenha() {
+  if (!this.senhaDigitada) {
+    this.snackBar.open('Digite sua senha', 'Fechar', { duration: 3000 });
+    return;
   }
+
+  this.alunosService.autenticarPorSenha(this.senhaDigitada).subscribe({
+    next: (aluno: Aluno) => {
+      const liberado = aluno.status?.toLowerCase() === 'ativo';
+
+      this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+        data: {
+          nome: aluno.nome,
+          foto: aluno.fotoBase64,
+          mensagem: liberado
+            ? 'Que bom que você veio!'
+            : 'Procure o atendimento para mais informações!'
+        },
+        duration: 6000,
+        panelClass: [
+          'snack-centralizado',
+          liberado ? 'snack-liberado' : 'snack-danger'
+        ]
+      });
+
+      if (liberado) {
+        this.alunosService.registrarEntrada(aluno.id).subscribe({
+          next: () => console.log('Entrada registrada com sucesso!'),
+          error: err => console.error('Erro ao registrar entrada:', err)
+        });
+      }
+
+      this.senhaDigitada = '';
+    },
+    error: err => {
+      console.error(err);
+      this.snackBar.open('Senha incorreta ou aluno não encontrado', 'Fechar', { duration: 3000 });
+      this.senhaDigitada = '';
+    }
+  });
+}
+  
 }

@@ -97,6 +97,11 @@ async salvar() {
     return;
   }
 
+  if (!this.editando && !this.aluno.senha) {
+    this.mostrarMensagem('Crie uma senha de acesso para o aluno.');
+    return;
+  }
+
   if (this.webcamImage) {
     const descriptor = await this.gerarDescriptor(this.webcamImage.imageAsDataUrl);
     if (descriptor) {
@@ -105,32 +110,38 @@ async salvar() {
   }
 
   this.alunosService.listar().subscribe((alunos) => {
-    const cpfJaExiste = alunos.some(
-      (a) => a.cpf === this.aluno.cpf && (!this.editando || a.id !== this.aluno.id)
-    );
+    // const cpfJaExiste = alunos.some(
+    //   (a) => a.cpf === this.aluno.cpf && (!this.editando || a.id !== this.aluno.id)
+    // );
 
-    const emailJaExiste = alunos.some(
-      (a) => a.email === this.aluno.email && (!this.editando || a.id !== this.aluno.id)
-    );
+    // const emailJaExiste = alunos.some(
+    //   (a) => a.email === this.aluno.email && (!this.editando || a.id !== this.aluno.id)
+    // );
 
-    if (cpfJaExiste) {
-      this.mostrarMensagem('Já existe um aluno cadastrado com este CPF.');
-      return;
-    }
+    // if (cpfJaExiste) {
+    //   this.mostrarMensagem('Já existe um aluno cadastrado com este CPF.');
+    //   return;
+    // }
 
-    if (emailJaExiste) {
-      this.mostrarMensagem('Já existe um aluno cadastrado com este e-mail.');
-      return;
-    }
+    // if (emailJaExiste) {
+    //   this.mostrarMensagem('Já existe um aluno cadastrado com este e-mail.');
+    //   return;
+    // }
 
     // Se não encontrou CPF/email duplicado, segue com salvar
     const request = this.editando
       ? this.alunosService.atualizar(this.aluno)
       : this.alunosService.criar(this.aluno);
 
-    request.subscribe(() => {
-      this.router.navigate(['/alunos']);
-    });
+    request.subscribe({
+  next: () => {
+    this.router.navigate(['/alunos']);
+  },
+  error: (err) => {
+    const msg = err?.error?.mensagem ?? 'Erro ao salvar aluno.';
+    this.mostrarMensagem(msg);
+  }
+});
   });
 }
 

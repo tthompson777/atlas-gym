@@ -17,6 +17,7 @@ export interface Aluno {
   pais?: string;
   descriptor?: number[];
   status: 'Ativo' | 'Inativo';
+  senha?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -51,5 +52,9 @@ export class AlunosService {
 
   registrarEntrada(alunoId: number) {
   return this.http.post('/api/entradas', { alunoId });
+}
+
+ autenticarPorSenha(senha: string) {
+  return this.http.post<Aluno>('http://localhost:3000/api/alunos/autenticar-senha', { senha });
 }
 }

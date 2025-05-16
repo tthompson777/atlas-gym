@@ -76,7 +76,12 @@
         <input matInput [(ngModel)]="aluno.pais" name="pais" />
       </mat-form-field>
 
-      <button mat-raised-button color="primary" [disabled]="!aluno.fotoBase64" (click)="salvar()">
+      <mat-form-field appearance="outline" class="campo">
+        <mat-label>Senha de acesso</mat-label>
+        <input matInput [(ngModel)]="aluno.senha" name="senha" type="password" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="!aluno.fotoBase64">
         Salvar
       </button>
 
