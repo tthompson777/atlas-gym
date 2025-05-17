@@ -15,6 +15,7 @@ import { NgIf } from '@angular/common';
 import { WebcamModule } from 'ngx-webcam';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import * as faceapi from 'face-api.js';
+import { BotaoComponent } from '../../shared/botao/botao.component';
 
 @Component({
   selector: 'app-formulario',
@@ -32,6 +33,7 @@ import * as faceapi from 'face-api.js';
     FormsModule,
     ReactiveFormsModule,
     WebcamModule,
+    BotaoComponent,
   ],
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss'],

@@ -67,7 +67,7 @@ mat-paginator {
 .mat-mdc-cell,
 .mat-mdc-header-cell {
   border: 0 !important;
-  padding: 12px;
+  padding: 12px !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -502,7 +502,7 @@ button {
 }
 
 .btn-laranja {
-  background-color: #e67e21 !important;
+  background-color: #e37a1f !important;
   color: white !important;
 }
 
@@ -527,38 +527,50 @@ button {
 }
 
 .btn-xs {
+  align-items: center;
   font-size: 0.6rem;
   padding: 4px;
 
   & mat-icon {
     font-size: 0.6rem;
+     width: 20px !important;
+    height: 20px !important;
   }
 }
 
 .btn-sm {
-  font-size: 0.75rem;
+  align-items: center;
+  font-size: 1.1rem;
   padding: 6px;
 
   & mat-icon {
     font-size: 1.1rem;
+     width: 25px !important;
+    height: 20px !important;
   }
 }
 
 .btn-md {
-  font-size: 0.875rem;
+  font-size: 1.3rem;
   padding: 10px;
+  align-items: center;
 
   & mat-icon {
     font-size: 1.3rem;
+    width: 28px !important;
+    height: 22px !important;
   }
 }
 
 .btn-lg {
   font-size: 1.5rem;
   padding: 15px;
+  align-items: center;
 
   & mat-icon {
     font-size: 1.5rem;
+    width: 30px !important;
+    height: 30px !important;
   }
 }
 
@@ -584,7 +596,7 @@ button {
 }
 
 .mdc-snackbar__surface {
-  border-left: 10px solid #e67e21 !important;
+  border-left: 10px solid #e37a1f !important;
   background-color: white !important;
   border-radius: 4px !important;
   color: #2e2e2e !important;
@@ -603,6 +615,12 @@ button {
   background-repeat: no-repeat;
   background-size: 700px auto;
 }
+.bg-alunos-novo {
+  background-image: url('/assets/bg-aluno-add.png');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 450px auto;
+}
 
 .box-shadow-none {
   box-shadow: none !important;
@@ -610,4 +628,32 @@ button {
 .mat-icon-24 {
   width: 24px !important;
   height: 24px !important;  
+}
+
+.webcam-personalizada .webcam-wrapper video {
+    width: 240px !important;
+    height: 240px !important;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .card-border-orange {
+    border-top: 7px solid #e37a1f !important;
+  }
+
+.bg-white-transparent-8 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.mdc-list-item__primary-text {
+  color: #ffF !important;
+}
+
+.mat-mdc-nav-list .mat-mdc-list-item {
+  border-bottom: 1px solid rgba($color: #ccc, $alpha: .1) !important;
+  border-radius: 0 !important;
+  &:hover{
+    background-color: #e37a1f !important;
+    color: #fff !important;
+  }
 }

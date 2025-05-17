@@ -132,7 +132,7 @@ export class ListaComponent implements OnInit {
       data: { foto },
       panelClass: 'foto-preview-dialog',
       hasBackdrop: false,
-      position: { top: '100px', left: '100px' }
+      position: { top: '200px', left: '200px' }
     });
   }
 

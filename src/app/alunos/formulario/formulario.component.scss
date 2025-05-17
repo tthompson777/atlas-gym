@@ -1,18 +1,105 @@
+.foto-section {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+  .video-moldura {
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    display: inline-block;
+    & .title-camera {
+      background-color: rgba(227, 122, 31, .5);
+      position: absolute;
+      display: flex;
+      align-items: center;
+      z-index: 999999;
+      padding: 4px;
+      justify-content: center;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1500;
+      transform: translateY(-50%);
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+
+  .foto-capturada {
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+
+    & img {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    & .title-foto {
+      background-color: rgba(227, 122, 31, .5);
+      position: absolute;
+      display: flex;
+      align-items: center;
+      z-index: 999999;
+      padding: 4px;
+      justify-content: center;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1500;
+      transform: translateY(-50%);
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+}
+
 .formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.linha {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 16px;
+  width: 100%;
 }
 
 .campo {
-  flex: 1 1 300px;
-  min-width: 250px;
+  flex: 1 1 0;
+  min-width: 390px;
 }
 
-.botoes {
-  width: 100%;
-  margin-top: 24px;
-  display: flex;
-  justify-content: flex-end;
+.foto-previa {
+  display: block;
+  margin: 16px auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-foto-form {
+  & button {
+    background-color: #e37a1f !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & span {
+      font-size: 1rem !important;
+    }
+  }
+}
+
+.espaco-foto-capturada {
+  height: 40px;
 }

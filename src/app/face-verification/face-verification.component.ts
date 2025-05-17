@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BotaoComponent } from '../shared/botao/botao.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-face-verification',
@@ -23,7 +24,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCardModule,
     MatButtonModule, 
     MatIconModule, 
-    BotaoComponent, 
+    BotaoComponent,
+    MatInputModule, 
   ],
   templateUrl: './face-verification.component.html',
   styleUrls: ['./face-verification.component.scss'],

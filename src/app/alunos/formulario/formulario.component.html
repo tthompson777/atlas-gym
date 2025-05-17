@@ -1,90 +1,116 @@
 <div class="container">
-  <mat-card class="mt-5">
-    <h2>{{ editando ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+    
+    <form class="formulario">
+      <h2>{{ editando ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
 
-    <div class="my-3">
-    <webcam 
-      [trigger]="triggerObservable" 
-      (imageCapture)="captureImage($event)" 
-      [videoOptions]="{ width: 320, height: 240 }"
-      [allowCameraSwitch]="false">
-    </webcam>
+      <!-- Captura de Foto -->
+    <div class="foto-section">
+      <div class="pr-5">
+        <div class="video-moldura">
+          <webcam
+            class="webcam-personalizada"
+            [trigger]="triggerObservable"
+            (imageCapture)="captureImage($event)"
+            [videoOptions]="{ width: 240, height: 240 }"
+            [allowCameraSwitch]="false">
+          </webcam>
+          <span class="title-camera">CÂMERA</span>
+        </div>
 
-    <button mat-raised-button color="primary" (click)="trigger.next()">Tirar Foto</button>
+        <div class="btn-foto-form mt-2">
+          <button
+            (click)="trigger.next()">
+            <span>TIRAR FOTO</span>
+          </button>
+        </div>
+      </div>
 
-    <div *ngIf="webcamImage" class="mt-3">
-      <img [src]="webcamImage.imageAsDataUrl" alt="Foto capturada" width="200" />
+      <div *ngIf="webcamImage">
+        <div>
+          <div class="foto-capturada">
+            <img [src]="webcamImage.imageAsDataUrl" alt="Foto capturada" width="240" height="240" />
+            <span class="title-foto">A FOTO FICARÁ ASSIM</span>
+          </div>
+          <div class="espaco-foto-capturada mt-2">
+        </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-    <form (ngSubmit)="salvar()" class="formulario">
+      <div class="linha">
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Nome</mat-label>
+          <input matInput [(ngModel)]="aluno.nome" name="nome" required />
+        </mat-form-field>
 
-      <img *ngIf="aluno.fotoBase64" [src]="aluno.fotoBase64" width="200" />
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Sexo</mat-label>
+          <input matInput [(ngModel)]="aluno.sexo" name="sexo" required />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Nome</mat-label>
-        <input matInput [(ngModel)]="aluno.nome" name="nome" required />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput [(ngModel)]="aluno.nascimento" name="nascimento" type="date" required />
+        </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Sexo</mat-label>
-        <input matInput [(ngModel)]="aluno.sexo" name="sexo" required />
-      </mat-form-field>
+      <div class="linha">
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Telefone</mat-label>
+          <input matInput [(ngModel)]="aluno.telefone" name="telefone" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Data de Nascimento</mat-label>
-        <input matInput [(ngModel)]="aluno.nascimento" name="nascimento" type="date" required />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>E-mail</mat-label>
+          <input matInput [(ngModel)]="aluno.email" name="email" type="email" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Telefone</mat-label>
-        <input matInput [(ngModel)]="aluno.telefone" name="telefone" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>CPF</mat-label>
+          <input matInput [(ngModel)]="aluno.cpf" name="cpf" />
+        </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>E-mail</mat-label>
-        <input matInput [(ngModel)]="aluno.email" name="email" type="email" />
-      </mat-form-field>
+      <div class="linha">
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Rua</mat-label>
+          <input matInput [(ngModel)]="aluno.rua" name="rua" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>CPF</mat-label>
-        <input matInput [(ngModel)]="aluno.cpf" name="cpf" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Número</mat-label>
+          <input matInput [(ngModel)]="aluno.numero" name="numero" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Rua</mat-label>
-        <input matInput [(ngModel)]="aluno.rua" name="rua" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Bairro</mat-label>
+          <input matInput [(ngModel)]="aluno.bairro" name="bairro" />
+        </mat-form-field>
+      </div>
+      
+      <div class="linha">
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Cidade</mat-label>
+          <input matInput [(ngModel)]="aluno.cidade" name="cidade" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Número</mat-label>
-        <input matInput [(ngModel)]="aluno.numero" name="numero" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>País</mat-label>
+          <input matInput [(ngModel)]="aluno.pais" name="pais" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Bairro</mat-label>
-        <input matInput [(ngModel)]="aluno.bairro" name="bairro" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="campo">
+          <mat-label>Senha de acesso</mat-label>
+          <input matInput [(ngModel)]="aluno.senha" name="senha" type="password" />
+        </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Cidade</mat-label>
-        <input matInput [(ngModel)]="aluno.cidade" name="cidade" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>País</mat-label>
-        <input matInput [(ngModel)]="aluno.pais" name="pais" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="campo">
-        <mat-label>Senha de acesso</mat-label>
-        <input matInput [(ngModel)]="aluno.senha" name="senha" type="password" />
-      </mat-form-field>
-
-      <button mat-raised-button color="primary" [disabled]="!aluno.fotoBase64">
-        Salvar
-      </button>
-
+      <div class="botao-salvar">
+        <app-botao tamanho="md" classe="btn-laranja mr-2" texto="Salvar" icone="save" [disableClick]="!aluno.fotoBase64"
+          (clicou)="salvar()">
+        </app-botao>
+      </div>
     </form>
   </mat-card>
 </div>

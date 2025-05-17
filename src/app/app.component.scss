@@ -15,6 +15,11 @@ mat-sidenav {
   position: sticky;
   top: 0;
   z-index: 10;
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+}
+
+.app-toolbar-img {
+  background-color: #1b2231 !important;
 }
 
 .app-container {
