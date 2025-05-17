@@ -35,8 +35,6 @@ import { filter } from 'rxjs/operators';
     FormsModule,
     ReactiveFormsModule,
     MatListModule,
-    NgClass,
-    NgIf
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: FirebaseTokenInterceptor, multi: true, }
