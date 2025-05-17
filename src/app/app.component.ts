@@ -43,28 +43,5 @@ import { filter } from 'rxjs/operators';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  constructor(public router: Router) {
-    this.router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe((event: NavigationEnd) => {
-      this.currentRoute = event.urlAfterRedirects;
-      this.rotaPronta = true; // marca quando a rota está pronta
-      console.log('Rota atual:', this.currentRoute);
-    });
-  }
-
-  title = 'Atlas GYM - Gerenciador de Academia';
-  currentYear = new Date().getFullYear();
-  currentRoute: string = '';
-  rotaPronta: boolean = false;
-
-  isVerificarPage(): boolean {
-  return this.currentRoute.startsWith('/verificar');
-}
-  isAlunosPage() {
-    return this.router.url === '/alunos';
-  }
-  isAlunoNovoPage() {
-    return this.router.url === '/alunos/novo';
-  }
+  
 }

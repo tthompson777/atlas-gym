@@ -20,7 +20,7 @@
       <span class="spacer"></span>
     </mat-toolbar>
 
-    <div class="app-container">
+    <div class="app-container" [ngClass]="{ 'bg-verificar': isVerificarPage(), 'bg-alunos': isAlunosPage(), 'bg-alunos-novo': isAlunoNovoPage() }">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

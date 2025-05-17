@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-main-layout',
@@ -30,8 +31,34 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     MatListModule,
+    NgClass
   ],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss']
 })
-export class MainLayoutComponent {}
+export class MainLayoutComponent {
+  constructor(public router: Router) {
+    this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event: NavigationEnd) => {
+      this.currentRoute = event.urlAfterRedirects;
+      this.rotaPronta = true; // marca quando a rota está pronta
+      console.log('Rota atual:', this.currentRoute);
+    });
+  }
+
+  title = 'Atlas GYM - Gerenciador de Academia';
+  currentYear = new Date().getFullYear();
+  currentRoute: string = '';
+  rotaPronta: boolean = false;
+
+  isVerificarPage(): boolean {
+  return this.currentRoute.startsWith('/verificar');
+}
+  isAlunosPage() {
+    return this.router.url === '/alunos';
+  }
+  isAlunoNovoPage() {
+    return this.router.url === '/alunos/novo';
+  }
+}
