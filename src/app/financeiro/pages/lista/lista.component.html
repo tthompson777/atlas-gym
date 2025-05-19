@@ -1,0 +1,39 @@
+<h2>Lançamentos Financeiros</h2>
+
+<div style="margin-bottom: 1rem;">
+  <a routerLink="/financeiro/novo">
+    <button>Novo Lançamento</button>
+  </a>
+</div>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Tipo</th>
+      <th>Categoria</th>
+      <th>Valor (R$)</th>
+      <th>Descrição</th>
+      <th>Data</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of transacoes">
+      <td>{{ t.id }}</td>
+      <td>{{ t.tipo }}</td>
+      <td>{{ t.categoria }}</td>
+      <td>{{ t.valor | currency:'BRL' }}</td>
+      <td>{{ t.descricao || '-' }}</td>
+      <td>{{ t.dataHora | date:'short' }}</td>
+      <td>
+        <a [routerLink]="['/financeiro/editar', t.id]">Editar</a>
+        |
+        <button (click)="excluir(t.id!)">Excluir</button>
+      </td>
+    </tr>
+    <tr *ngIf="transacoes.length === 0">
+      <td colspan="7" align="center">Nenhum lançamento encontrado.</td>
+    </tr>
+  </tbody>
+</table>

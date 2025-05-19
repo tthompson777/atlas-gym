@@ -1,0 +1,14 @@
+form {
+  display: grid;
+  gap: 12px;
+  max-width: 400px;
+
+  input, select {
+    width: 100%;
+    padding: 6px;
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}

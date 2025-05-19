@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FaceRecognitionService } from '../services/face-recognition.service';
-import { AlunosService, Aluno } from '../alunos/alunos.service';
+import { AlunosService, Aluno } from '../services/alunos.service';
 import { NgIf } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BoasVindasSnackbarComponent } from '../shared/boas-vindas-snackbar/boas-vindas-snackbar.component';

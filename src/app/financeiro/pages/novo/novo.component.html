@@ -1,0 +1,43 @@
+<h2>Novo Lançamento Financeiro</h2>
+
+<form [formGroup]="form" (ngSubmit)="salvar()">
+  <div>
+    <label>Tipo:</label>
+    <select formControlName="tipo">
+      <option value="entrada">Entrada</option>
+      <option value="saida">Saída</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Categoria:</label>
+    <select formControlName="categoria">
+      <option value="" disabled>Selecione</option>
+      <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="exibirAluno">
+  <label>Aluno:</label>
+  <select formControlName="alunoId">
+    <option value="">Selecione o aluno</option>
+    <option *ngFor="let aluno of alunos" [value]="aluno.id">{{ aluno.nome }}</option>
+  </select>
+</div>
+
+  <div>
+    <label>Valor (R$):</label>
+    <input type="number" formControlName="valor" step="0.01" />
+  </div>
+
+  <div>
+    <label>Descrição:</label>
+    <input type="text" formControlName="descricao" />
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Salvar</button>
+</form>
+
+<div style="margin-top: 1rem;">
+  <a routerLink="/financeiro">← Voltar</a>
+</div>

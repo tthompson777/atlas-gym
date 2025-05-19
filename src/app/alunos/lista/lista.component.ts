@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlunosService, Aluno } from '../alunos.service';
+import { AlunosService, Aluno } from '../../services/alunos.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BotaoComponent } from '../../shared/botao/botao.component';

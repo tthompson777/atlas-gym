@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { BotaoComponent } from './botao/botao.component';
 
 @NgModule({
-  declarations: [BotaoComponent],
   imports: [
     CommonModule,
     FormsModule,
+    BotaoComponent
   ]
 })
 export class SharedModule { }
