@@ -5,11 +5,25 @@ import { Router } from '@angular/router';
 import { FinanceiroService } from '../../../services/financeiro.service';
 import { Transacao } from '../../../models/transacao.model';
 import { Aluno, AlunosService } from '../../../services/alunos.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { BotaoComponent } from '../../../shared/botao/botao.component';
 
 @Component({
   selector: 'app-financeiro-novo',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatCardModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatSelectModule, 
+    ReactiveFormsModule,
+    BotaoComponent,
+  ],
   templateUrl: './novo.component.html',
   styleUrls: ['./novo.component.scss']
 })
@@ -39,7 +53,7 @@ export class FinanceiroNovoComponent {
 
   constructor() {
     this.form = this.fb.group({
-    tipo: ['entrada', Validators.required],
+    tipo: ['Entrada', Validators.required],
     categoria: ['', Validators.required],
     valor: [null, [Validators.required, Validators.min(0.01)]],
     descricao: [''],
@@ -50,7 +64,7 @@ export class FinanceiroNovoComponent {
   }
 
   get categorias(): string[] {
-    return this.form.get('tipo')?.value === 'entrada'
+    return this.form.get('tipo')?.value === 'Entrada'
       ? this.categoriasEntrada
       : this.categoriasSaida;
   }
@@ -58,7 +72,7 @@ export class FinanceiroNovoComponent {
   get exibirAluno(): boolean {
   const tipo = this.form.get('tipo')?.value;
   const categoria = this.form.get('categoria')?.value;
-  return tipo === 'entrada' && this.categoriasQueRequeremAluno.includes(categoria);
+  return tipo === 'Entrada' && this.categoriasQueRequeremAluno.includes(categoria);
 }
 
   salvar(): void {
@@ -71,4 +85,8 @@ export class FinanceiroNovoComponent {
       error: (err) => alert('Erro ao salvar: ' + (err?.error?.mensagem || err.message))
     });
   }
+
+  voltar() {
+  this.router.navigate(['/financeiro']);
+}
 }

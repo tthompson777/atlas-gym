@@ -107,9 +107,14 @@
       </div>
 
       <div class="botao-salvar">
-        <app-botao tamanho="md" classe="btn-laranja mr-2" texto="Salvar" icone="save" [disableClick]="!aluno.fotoBase64"
-          (clicou)="salvar()">
-        </app-botao>
+        <button
+          mat-button
+          :disable="!aluno.fotoBase64"
+          class="btn-verde"
+          (click)="salvar()">
+          <mat-icon class="mr-2">save</mat-icon>
+          Salvar
+        </button>
       </div>
     </form>
   </mat-card>

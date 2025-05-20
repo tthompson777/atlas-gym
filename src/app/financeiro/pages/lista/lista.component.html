@@ -1,39 +1,83 @@
-<h2>Lançamentos Financeiros</h2>
+<div class="container">
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+    <div class="d-flex align-center mb-4">
+      <div class="flex-1"><h2 class="mb-4">Lançamentos Financeiros</h2></div>
 
-<div style="margin-bottom: 1rem;">
-  <a routerLink="/financeiro/novo">
-    <button>Novo Lançamento</button>
-  </a>
+      <div>
+        <button
+          mat-button
+          class="btn-laranja py-2 px-4"
+          (click)="novoLancamento()">
+          <mat-icon class="mr-2">add</mat-icon>
+          Novo Lançamento
+        </button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 striped-table">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let t"> {{ t.id }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+        <td mat-cell *matCellDef="let t"> {{ t.tipo }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef> Categoria </th>
+        <td mat-cell *matCellDef="let t"> {{ t.categoria }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valor">
+        <th mat-header-cell *matHeaderCellDef> Valor (R$) </th>
+        <td mat-cell *matCellDef="let t"> {{ t.valor | currency:'BRL' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef> Descrição </th>
+        <td mat-cell *matCellDef="let t"> {{ t.descricao || '-' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef> Data </th>
+        <td mat-cell *matCellDef="let t"> {{ t.dataHora | date:'short' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef> Ações </th>
+        <td mat-cell *matCellDef="let t">
+          <div class="d-flex gap-2 align-center">
+            <button class="btn-verde"
+              matTooltip="Editar"
+              (click)="editarLancamento(t.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button class="btn-vermelho"
+              matTooltip="Excluir"
+              (click)="excluir(t.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+      <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+    </table>
+
+    <mat-paginator *ngIf="dataSource && dataSource.filteredData.length > 0"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 25, 100]"
+      showFirstLastButtons
+      class="mt-3">
+    </mat-paginator>
+
+    <div *ngIf="dataSource?.filteredData?.length === 0">
+      <app-no-data-table [icon]="'fitness_center'"></app-no-data-table>
+    </div>
+  </mat-card>
 </div>
-
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Tipo</th>
-      <th>Categoria</th>
-      <th>Valor (R$)</th>
-      <th>Descrição</th>
-      <th>Data</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let t of transacoes">
-      <td>{{ t.id }}</td>
-      <td>{{ t.tipo }}</td>
-      <td>{{ t.categoria }}</td>
-      <td>{{ t.valor | currency:'BRL' }}</td>
-      <td>{{ t.descricao || '-' }}</td>
-      <td>{{ t.dataHora | date:'short' }}</td>
-      <td>
-        <a [routerLink]="['/financeiro/editar', t.id]">Editar</a>
-        |
-        <button (click)="excluir(t.id!)">Excluir</button>
-      </td>
-    </tr>
-    <tr *ngIf="transacoes.length === 0">
-      <td colspan="7" align="center">Nenhum lançamento encontrado.</td>
-    </tr>
-  </tbody>
-</table>

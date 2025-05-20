@@ -50,7 +50,7 @@ export class FinanceiroEditarComponent implements OnInit {
   }
 
   get categorias(): string[] {
-    return this.form.get('tipo')?.value === 'entrada'
+    return this.form.get('tipo')?.value === 'Entrada'
       ? this.categoriasEntrada
       : this.categoriasSaida;
   }

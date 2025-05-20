@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AlunosService, Aluno } from '../../services/alunos.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { BotaoComponent } from '../../shared/botao/botao.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,14 +14,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import * as faceapi from 'face-api.js';
 import { FaceRecognitionService } from '../../services/face-recognition.service';
 import { FotoPreviewComponent } from '../../shared/foto-preview/foto-preview.component';
+import { NoDataTableComponent } from "../../shared/no-data-table/no-data-table.component";
 
 @Component({
   selector: 'app-alunos',
   standalone: true,
-  imports: [CommonModule, BotaoComponent, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, NoDataTableComponent],
   templateUrl: './lista.component.html',
 })
 export class ListaComponent implements OnInit {

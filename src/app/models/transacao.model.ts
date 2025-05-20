@@ -1,6 +1,6 @@
 export interface Transacao {
   id?: number;
-  tipo: 'entrada' | 'saida';
+  tipo: 'Entrada' | 'Saida';
   categoria: string;
   valor: number;
   descricao?: string;
