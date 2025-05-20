@@ -647,6 +647,9 @@ button {
 }
 
 mat-sidenav .mdc-list-item__primary-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #fff !important;
 }
 

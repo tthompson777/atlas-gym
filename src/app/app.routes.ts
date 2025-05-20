@@ -11,6 +11,8 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
 import { FinanceiroListaComponent } from './financeiro/pages/lista/lista.component';
 import { FinanceiroEditarComponent } from './financeiro/pages/editar/editar.component';
 import { FinanceiroNovoComponent } from './financeiro/pages/novo/novo.component';
+import { FichaExerciciosComponent } from './ficha-exercicios/ficha-exercicios.component';
+import { FichaExerciciosListaComponent } from './ficha-exercicios/lista/lista.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -29,7 +31,12 @@ export const routes: Routes = [
       // 👇 Rotas do Financeiro
       { path: 'financeiro', component: FinanceiroListaComponent },
       { path: 'financeiro/novo', component: FinanceiroNovoComponent },
-      { path: 'financeiro/editar/:id', component: FinanceiroEditarComponent }
+      { path: 'financeiro/editar/:id', component: FinanceiroEditarComponent },
+      
+      // 👇 Rotas Ficha de Exercícios
+      { path: 'fichas', component: FichaExerciciosListaComponent },
+      { path: 'fichas/nova', component: FichaExerciciosComponent },
+      { path: 'fichas/editar/:id', component: FichaExerciciosComponent },
     ]
   },
 
