@@ -24,7 +24,7 @@ export interface Aluno {
 export class AlunosService {
   private API = 'http://localhost:3000/api/alunos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listar() {
     return this.http.get<Aluno[]>(this.API);
@@ -50,11 +50,11 @@ export class AlunosService {
     return this.http.patch<Aluno>(`${this.API}/${id}/inativar`, {});
   }
 
-  registrarEntrada(alunoId: number) {
-  return this.http.post('/api/entradas', { alunoId });
-}
+  registrarAcesso(alunoId: number) {
+    return this.http.post('http://localhost:3000/api/registro-acesso', { alunoId });
+  }
 
- autenticarPorSenha(senha: string) {
-  return this.http.post<Aluno>('http://localhost:3000/api/alunos/autenticar-senha', { senha });
-}
+  autenticarPorSenha(senha: string) {
+    return this.http.post<Aluno>('http://localhost:3000/api/alunos/autenticar-senha', { senha });
+  }
 }

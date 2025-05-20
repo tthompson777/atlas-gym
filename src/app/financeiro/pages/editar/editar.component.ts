@@ -4,11 +4,26 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { FinanceiroService } from '../../../services/financeiro.service';
 import { Transacao } from '../../../models/transacao.model';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { AlunosService, Aluno } from '../../../services/alunos.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-financeiro-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatCardModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatSelectModule, 
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
   templateUrl: './editar.component.html',
   styleUrls: ['./editar.component.scss']
 })
@@ -17,7 +32,10 @@ export class FinanceiroEditarComponent implements OnInit {
   private service = inject(FinanceiroService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private alunosService = inject(AlunosService);
 
+  alunos: Aluno[] = [];
+  categoriasQueRequeremAluno = ['Mensalidade', 'Matrícula', 'Avaliação Física'];
   form: FormGroup;
   transacaoId!: number;
 
@@ -40,14 +58,27 @@ export class FinanceiroEditarComponent implements OnInit {
       tipo: ['', Validators.required],
       categoria: ['', Validators.required],
       valor: [null, [Validators.required, Validators.min(0.01)]],
-      descricao: ['']
+      descricao: [''],
+      alunoId: [''],
     });
+
+    this.alunosService.listar().subscribe(alunos => this.alunos = alunos);
   }
 
   ngOnInit(): void {
     this.transacaoId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.alunosService.listar().subscribe(alunos => {
+    this.alunos = alunos;
     this.carregarTransacao();
+  });
   }
+
+  get exibirAluno(): boolean {
+  const tipo = this.form.get('tipo')?.value;
+  const categoria = this.form.get('categoria')?.value;
+  return tipo === 'Entrada' && this.categoriasQueRequeremAluno.includes(categoria);
+}
 
   get categorias(): string[] {
     return this.form.get('tipo')?.value === 'Entrada'
@@ -72,4 +103,8 @@ export class FinanceiroEditarComponent implements OnInit {
       error: (err) => alert('Erro ao atualizar: ' + (err?.error?.mensagem || err.message))
     });
   }
+
+  voltar() {
+  this.router.navigate(['/financeiro']);
+}
 }

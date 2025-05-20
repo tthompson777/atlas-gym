@@ -19,13 +19,13 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
-    NgIf, 
-    MatSnackBarModule, 
+    NgIf,
+    MatSnackBarModule,
     MatCardModule,
-    MatButtonModule, 
-    MatIconModule, 
+    MatButtonModule,
+    MatIconModule,
     BotaoComponent,
-    MatInputModule, 
+    MatInputModule,
   ],
   templateUrl: './face-verification.component.html',
   styleUrls: ['./face-verification.component.scss'],
@@ -78,20 +78,20 @@ export class FaceVerificationComponent implements OnInit {
   }
 
   iniciarContadorReinicio() {
-  this.contadorProximoAluno = 5;
+    this.contadorProximoAluno = 5;
 
-  const intervalo = setInterval(() => {
-    if (this.contadorProximoAluno! > 1) {
-      this.contadorProximoAluno!--;
-    } else {
-      clearInterval(intervalo);
-      this.contadorProximoAluno = null;
-      this.alunoReconhecido = null;
-      this.verificacaoAutomaticaAtiva = false;
-      this.iniciarVerificacaoAutomatica();
-    }
-  }, 1000);
-}
+    const intervalo = setInterval(() => {
+      if (this.contadorProximoAluno! > 1) {
+        this.contadorProximoAluno!--;
+      } else {
+        clearInterval(intervalo);
+        this.contadorProximoAluno = null;
+        this.alunoReconhecido = null;
+        this.verificacaoAutomaticaAtiva = false;
+        this.iniciarVerificacaoAutomatica();
+      }
+    }, 1000);
+  }
 
 
   iniciarVerificacaoAutomatica() {
@@ -134,7 +134,7 @@ export class FaceVerificationComponent implements OnInit {
               nome: alunoMaisProvavel.nome,
               foto: alunoMaisProvavel.fotoBase64,
               mensagem: alunoLiberado
-                ? 'Que bom que você veio!'
+                ? 'Tudo certo!'
                 : 'Procure o atendimento para mais informações!'
             },
             duration: 6000,
@@ -154,9 +154,15 @@ export class FaceVerificationComponent implements OnInit {
 
 
           if (alunoLiberado) {
-            this.alunosService.registrarEntrada(alunoMaisProvavel.id).subscribe({
-              next: () => console.log('Entrada registrada com sucesso!'),
-              error: err => console.error('Erro ao registrar entrada:', err)
+            this.alunosService.registrarAcesso(alunoMaisProvavel.id).subscribe({
+              next: (res: any) => {
+                if (res.tipo === 'entrada') {
+                  console.log(`Entrada registrada às ${new Date(res.registro.dataEntrada).toLocaleTimeString()}`);
+                } else {
+                  console.log(`Saída registrada às ${new Date(res.registro.dataSaida).toLocaleTimeString()}`);
+                }
+              },
+              error: err => console.error('Erro ao registrar acesso:', err)
             });
           }
         }
@@ -173,7 +179,7 @@ export class FaceVerificationComponent implements OnInit {
 
   async verificar() {
     if (this.contadorProximoAluno !== null) return;
-    
+
     const video = this.videoRef.nativeElement;
     await new Promise(res => setTimeout(res, 200));
     const detection = await this.face.detectFace(video);
@@ -216,9 +222,15 @@ export class FaceVerificationComponent implements OnInit {
       });
 
       if (alunoMaisProvavel.status?.toLowerCase() !== 'inativo') {
-        this.alunosService.registrarEntrada(alunoMaisProvavel.id).subscribe({
-          next: () => console.log('Entrada registrada com sucesso!'),
-          error: err => console.error('Erro ao registrar entrada:', err)
+        this.alunosService.registrarAcesso(alunoMaisProvavel.id).subscribe({
+          next: (res: any) => {
+            if (res.tipo === 'entrada') {
+              console.log(`Entrada registrada às ${new Date(res.registro.dataEntrada).toLocaleTimeString()}`);
+            } else {
+              console.log(`Saída registrada às ${new Date(res.registro.dataSaida).toLocaleTimeString()}`);
+            }
+          },
+          error: err => console.error('Erro ao registrar acesso:', err)
         });
       }
     }
@@ -226,48 +238,54 @@ export class FaceVerificationComponent implements OnInit {
       this.alunoInativo = false;
       this.alunoReconhecido = null;
     }
-  }  
-
-  verificarSenha() {
-  if (!this.senhaDigitada) {
-    this.snackBar.open('Digite sua senha', 'Fechar', { duration: 3000 });
-    return;
   }
 
-  this.alunosService.autenticarPorSenha(this.senhaDigitada).subscribe({
-    next: (aluno: Aluno) => {
-      const liberado = aluno.status?.toLowerCase() === 'ativo';
-
-      this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
-        data: {
-          nome: aluno.nome,
-          foto: aluno.fotoBase64,
-          mensagem: liberado
-            ? 'Que bom que você veio!'
-            : 'Procure o atendimento para mais informações!'
-        },
-        duration: 6000,
-        panelClass: [
-          'snack-centralizado',
-          liberado ? 'snack-liberado' : 'snack-danger'
-        ]
-      });
-
-      if (liberado) {
-        this.alunosService.registrarEntrada(aluno.id).subscribe({
-          next: () => console.log('Entrada registrada com sucesso!'),
-          error: err => console.error('Erro ao registrar entrada:', err)
-        });
-      }
-
-      this.senhaDigitada = '';
-    },
-    error: err => {
-      console.error(err);
-      this.snackBar.open('Senha incorreta ou aluno não encontrado', 'Fechar', { duration: 3000 });
-      this.senhaDigitada = '';
+  verificarSenha() {
+    if (!this.senhaDigitada) {
+      this.snackBar.open('Digite sua senha', 'Fechar', { duration: 3000 });
+      return;
     }
-  });
-}
-  
+
+    this.alunosService.autenticarPorSenha(this.senhaDigitada).subscribe({
+      next: (aluno: Aluno) => {
+        const liberado = aluno.status?.toLowerCase() === 'ativo';
+
+        this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+          data: {
+            nome: aluno.nome,
+            foto: aluno.fotoBase64,
+            mensagem: liberado
+              ? 'Que bom que você veio!'
+              : 'Procure o atendimento para mais informações!'
+          },
+          duration: 6000,
+          panelClass: [
+            'snack-centralizado',
+            liberado ? 'snack-liberado' : 'snack-danger'
+          ]
+        });
+
+        if (liberado) {
+          this.alunosService.registrarAcesso(aluno.id).subscribe({
+            next: (res: any) => {
+              if (res.tipo === 'entrada') {
+                console.log(`Entrada registrada às ${new Date(res.registro.dataEntrada).toLocaleTimeString()}`);
+              } else {
+                console.log(`Saída registrada às ${new Date(res.registro.dataSaida).toLocaleTimeString()}`);
+              }
+            },
+            error: err => console.error('Erro ao registrar acesso:', err)
+          });
+        }
+
+        this.senhaDigitada = '';
+      },
+      error: err => {
+        console.error(err);
+        this.snackBar.open('Senha incorreta ou aluno não encontrado', 'Fechar', { duration: 3000 });
+        this.senhaDigitada = '';
+      }
+    });
+  }
+
 }

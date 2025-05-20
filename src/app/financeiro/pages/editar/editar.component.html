@@ -1,35 +1,60 @@
-<h2>Editar Lançamento</h2>
+<div class="container">
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+    <div class="d-flex mb-4">
+      <h2 class="mb-4 flex-1">Editar Lançamento Financeiro</h2>
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="salvar()">
-  <div>
-    <label>Tipo:</label>
-    <select formControlName="tipo">
-      <option value="Entrada">Entrada</option>
-      <option value="Saida">Saída</option>
-    </select>
-  </div>
+    <form [formGroup]="form">
 
-  <div>
-    <label>Categoria:</label>
-    <select formControlName="categoria">
-      <option value="" disabled>Selecione</option>
-      <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
-    </select>
-  </div>
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="tipo">
+          <mat-option value="Entrada">Entrada</mat-option>
+          <mat-option value="Saida">Saída</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div>
-    <label>Valor (R$):</label>
-    <input type="number" formControlName="valor" step="0.01" />
-  </div>
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoria">
+          <mat-option value="" disabled>Selecione</mat-option>
+          <mat-option *ngFor="let c of categorias" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div>
-    <label>Descrição:</label>
-    <input type="text" formControlName="descricao" />
-  </div>
+      <mat-form-field *ngIf="exibirAluno" appearance="outline" class="w-100 mb-3">
+        <mat-label>Aluno</mat-label>
+        <mat-select formControlName="alunoId">
+          <mat-option value="">Selecione o aluno</mat-option>
+          <mat-option *ngFor="let aluno of alunos" [value]="aluno.id">{{ aluno.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <button type="submit" [disabled]="form.invalid">Salvar Alterações</button>
-</form>
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Valor (R$)</mat-label>
+        <input matInput type="number" formControlName="valor" step="0.01">
+      </mat-form-field>
 
-<div style="margin-top: 1rem;">
-  <a routerLink="/financeiro">← Voltar</a>
+      <mat-form-field appearance="outline" class="w-100 mb-4">
+        <mat-label>Descrição</mat-label>
+        <input matInput type="text" formControlName="descricao">
+      </mat-form-field>
+
+      <div class="d-flex">
+        <button
+          class="btn-verde mr-2"
+          :disable="form.invalid"
+          (click)="salvar()">
+          <mat-icon class="mr-2">save</mat-icon> Salvar Alterações
+        </button>
+
+        <button
+          class="btn-cancelar"
+          (click)="voltar()">
+          <mat-icon class="mr-2">close</mat-icon> Cancelar
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlunosService, Aluno } from '../../services/alunos.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,7 +36,7 @@ import * as faceapi from 'face-api.js';
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss'],
 })
-export class FormularioComponent {
+export class FormularioComponent implements OnInit {
   trigger: Subject<void> = new Subject<void>();
   webcamImage?: WebcamImage;
   triggerObservable: Observable<void> = this.trigger.asObservable();
@@ -77,89 +77,73 @@ export class FormularioComponent {
     }
   }
 
+  async ngOnInit() {
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models/tiny_face_detector');
+    await faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models/face_landmark_68');
+    await faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models/face_recognition');
+  }
+
   captureImage(webcamImage: WebcamImage): void {
-  this.webcamImage = webcamImage;
-  this.aluno.fotoBase64 = webcamImage.imageAsDataUrl; // base64 para enviar ao backend
-}
-
-private mostrarMensagem(mensagem: string) {
-  this.snackBar.open(mensagem, 'Fechar', {
-    duration: 4000,
-    verticalPosition: 'top',
-    horizontalPosition: 'center',
-    panelClass: ['snack-danger']
-  });
-}
-
-async salvar() {
-  if (!this.aluno.fotoBase64) {
-    this.mostrarMensagem('Por favor, capture uma foto do aluno antes de salvar.');
-    return;
+    this.webcamImage = webcamImage;
+    this.aluno.fotoBase64 = webcamImage.imageAsDataUrl; // base64 para enviar ao backend
   }
 
-  if (!this.editando && !this.aluno.senha) {
-    this.mostrarMensagem('Crie uma senha de acesso para o aluno.');
-    return;
+  private mostrarMensagem(mensagem: string) {
+    this.snackBar.open(mensagem, 'Fechar', {
+      duration: 4000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      panelClass: ['snack-danger']
+    });
   }
 
-  if (this.webcamImage) {
-    const descriptor = await this.gerarDescriptor(this.webcamImage.imageAsDataUrl);
-    if (descriptor) {
-      this.aluno.descriptor = Array.from(descriptor);
+  async salvar() {
+    if (!this.aluno.fotoBase64) {
+      this.mostrarMensagem('Por favor, capture uma foto do aluno antes de salvar.');
+      return;
     }
-  }
 
-  this.alunosService.listar().subscribe((alunos) => {
-    // const cpfJaExiste = alunos.some(
-    //   (a) => a.cpf === this.aluno.cpf && (!this.editando || a.id !== this.aluno.id)
-    // );
+    if (!this.editando && !this.aluno.senha) {
+      this.mostrarMensagem('Crie uma senha de acesso para o aluno.');
+      return;
+    }
 
-    // const emailJaExiste = alunos.some(
-    //   (a) => a.email === this.aluno.email && (!this.editando || a.id !== this.aluno.id)
-    // );
+    // Aguarda imagem carregar corretamente no DOM para geração do descriptor
+    const descriptor = await this.gerarDescriptor(this.aluno.fotoBase64);
+    if (!descriptor) {
+      this.mostrarMensagem('Não foi possível identificar o rosto na imagem. Tente novamente.');
+      return;
+    }
 
-    // if (cpfJaExiste) {
-    //   this.mostrarMensagem('Já existe um aluno cadastrado com este CPF.');
-    //   return;
-    // }
+    this.aluno.descriptor = Array.from(descriptor);
 
-    // if (emailJaExiste) {
-    //   this.mostrarMensagem('Já existe um aluno cadastrado com este e-mail.');
-    //   return;
-    // }
-
-    // Se não encontrou CPF/email duplicado, segue com salvar
     const request = this.editando
       ? this.alunosService.atualizar(this.aluno)
       : this.alunosService.criar(this.aluno);
 
     request.subscribe({
-  next: () => {
-    this.router.navigate(['/alunos']);
-  },
-  error: (err) => {
-    const msg = err?.error?.mensagem ?? 'Erro ao salvar aluno.';
-    this.mostrarMensagem(msg);
+      next: () => {
+        this.router.navigate(['/alunos']);
+      },
+      error: (err) => {
+        const msg = err?.error?.mensagem ?? 'Erro ao salvar aluno.';
+        this.mostrarMensagem(msg);
+      }
+    });
+
   }
-});
-  });
-}
 
-async gerarDescriptor(fotoBase64: string): Promise<Float32Array | null> {
-  await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models/tiny_face_detector');
-  await faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models/face_landmark_68');
-  await faceapi.nets.faceRecognitionNet.loadFromUri('/assets/models/face_recognition');
+  async gerarDescriptor(fotoBase64: string): Promise<Float32Array | null> {
+    const img = new Image();
+    img.src = fotoBase64;
+    await new Promise((res) => (img.onload = res));
 
-  const img = new Image();
-  img.src = fotoBase64;
-  await new Promise((res) => (img.onload = res));
+    const detection = await faceapi
+      .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptor();
 
-  const detection = await faceapi
-    .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks()
-    .withFaceDescriptor();
-
-  return detection?.descriptor || null;
-}
+    return detection?.descriptor || null;
+  }
 
 }

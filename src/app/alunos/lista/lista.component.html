@@ -79,27 +79,24 @@
         <td mat-cell *matCellDef="let aluno">
           <div class="d-flex align-center gap-2">
             <button
-              mat-button
               matTooltip="Editar"
               class="btn-verde"
               (click)="editar(aluno.id)">
-              <mat-icon class="mr-2">edit</mat-icon>
+              <mat-icon>edit</mat-icon>
             </button>
 
             <button
-              mat-button
               matTooltip="Inativar"
-              class="btn-cinza mr-2"
+              class="btn-cancelar mr-2"
               (click)="inativar(aluno.id)">
-              <mat-icon class="mr-2">close</mat-icon>
+              <mat-icon>close</mat-icon>
             </button>
 
             <button
-              mat-button
               matTooltip="Excluir"
               class="btn-vermelho mr-2"
               (click)="excluir(aluno.id)">
-              <mat-icon class="mr-2">delete</mat-icon>
+              <mat-icon>delete</mat-icon>
             </button>
 
           </div>
