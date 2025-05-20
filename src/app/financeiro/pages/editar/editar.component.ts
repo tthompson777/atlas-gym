@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AlunosService, Aluno } from '../../../services/alunos.service';
 import { MatIconModule } from '@angular/material/icon';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-financeiro-editar',
@@ -53,7 +54,7 @@ export class FinanceiroEditarComponent implements OnInit {
     'Outras Despesas'
   ];
 
-  constructor() {
+  constructor(private toast: ToastService,) {
     this.form = this.fb.group({
       tipo: ['', Validators.required],
       categoria: ['', Validators.required],
@@ -89,7 +90,7 @@ export class FinanceiroEditarComponent implements OnInit {
   carregarTransacao() {
     this.service.obter(this.transacaoId).subscribe({
       next: (transacao) => this.form.patchValue(transacao),
-      error: () => alert('Erro ao carregar lançamento')
+      error: () => this.toast.show('Erro ao carregar lançamento!', 'erro')
     });
   }
 
@@ -100,7 +101,7 @@ export class FinanceiroEditarComponent implements OnInit {
 
     this.service.atualizar(this.transacaoId, dadosAtualizados).subscribe({
       next: () => this.router.navigate(['/financeiro']),
-      error: (err) => alert('Erro ao atualizar: ' + (err?.error?.mensagem || err.message))
+      error: (err) => this.toast.show(`${err?.error?.mensagem || err.message}`, 'erro')
     });
   }
 

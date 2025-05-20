@@ -1,0 +1,71 @@
+<div class="container">
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+
+    <h2 class="mb-4">Ficha de Exercícios</h2>
+
+    <!-- <form [formGroup]="formFicha" (ngSubmit)="salvarFicha()"> -->
+    <form [formGroup]="formFicha">
+
+      <!-- Selecionar Aluno -->
+      <mat-form-field *ngIf="!editando" appearance="outline" class="w-100 mb-3">
+        <mat-label>Selecionar Aluno</mat-label>
+        <mat-select formControlName="alunoId" (selectionChange)="preencherDadosAluno()">
+          <mat-option *ngFor="let aluno of alunos" [value]="aluno.id">
+            {{ aluno.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Nome + Idade (automático) -->
+      <div class="d-flex gap-3 mb-4">
+        <mat-form-field appearance="outline" class="w-50">
+          <mat-label>Nome completo</mat-label>
+          <input matInput [value]="alunoSelecionado?.nome" disabled>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-50">
+          <mat-label>Idade</mat-label>
+          <input matInput [value]="alunoSelecionado?.idade" disabled>
+        </mat-form-field>
+      </div>
+
+      <!-- GRUPOS MUSCULARES -->
+      <ng-container *ngFor="let grupo of grupos">
+        <h3 class="mt-4 mb-2">{{ grupo.nome }}</h3>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          
+          <div *ngFor="let exercicio of grupo.exercicios" class="d-flex flex-column flex-wrap flex- gap-3 align-center mb-3">
+            <div class="d-flex flex-column card-ficha p-3">
+              <div [matTooltip]="exercicio.length > 20 ? exercicio : ''" matTooltipPosition="above" class="mb-3">
+                {{ exercicio.length > 20 ? (exercicio | slice:0:20) + '...' : exercicio }}
+              </div>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Séries</mat-label>
+                <input matInput type="number" formControlName="{{ getControle(grupo.nome, exercicio, 'series') }}">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Repetições</mat-label>
+                <input matInput type="number" formControlName="{{ getControle(grupo.nome, exercicio, 'repeticoes') }}">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </ng-container>
+
+      <!-- Botões -->
+      <div class="d-flex mt-5">
+        <button class="btn-verde mr-2" :disable="formFicha.invalid" (click)="salvarFicha()">
+          <mat-icon class="mr-2">save</mat-icon> {{ editando ? 'Atualizar Ficha' : 'Salvar Ficha' }}
+        </button>
+
+        <button class="btn-cancelar" (click)="voltar()">
+          <mat-icon class="mr-2">close</mat-icon> Cancelar
+        </button>
+      </div>
+    </form>
+
+  </mat-card>
+</div>

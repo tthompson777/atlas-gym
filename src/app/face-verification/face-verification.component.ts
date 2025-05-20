@@ -11,6 +11,7 @@ import { BotaoComponent } from '../shared/botao/botao.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-face-verification',
@@ -45,6 +46,7 @@ export class FaceVerificationComponent implements OnInit {
     private face: FaceRecognitionService,
     private alunosService: AlunosService,
     private snackBar: MatSnackBar,
+    private toast: ToastService,
   ) { }
 
   async ngOnInit() {
@@ -185,7 +187,7 @@ export class FaceVerificationComponent implements OnInit {
     const detection = await this.face.detectFace(video);
 
     if (!detection) {
-      alert('Nenhum rosto detectado!');
+      this.toast.show('Nenhum rosto detectado!', 'aviso');
       return;
     }
 
@@ -212,7 +214,7 @@ export class FaceVerificationComponent implements OnInit {
           foto: alunoMaisProvavel.fotoBase64,
           mensagem: alunoMaisProvavel.status?.toLowerCase() === 'inativo'
             ? 'Procure o atendimento para mais informações!'
-            : 'Que bom que você veio!'
+            : 'Tudo certo!!'
         },
         duration: 6000,
         panelClass: [

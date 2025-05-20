@@ -47,4 +47,8 @@ export class FichaExercicioService {
   excluir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`);
   }
+
+  buscarPorAluno(alunoId: number): Observable<{ id: number }> {
+    return this.http.get<{ id: number }>(`${this.API}/por-aluno/${alunoId}`);
+  }
 }

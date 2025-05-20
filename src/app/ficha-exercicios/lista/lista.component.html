@@ -1,48 +1,49 @@
-<mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
-  <div class="d-flex mb-4">
-    <div class="flex-1"><h2 class="mb-4">Alunos</h2></div>
+<div class="container">
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+    <div class="d-flex mb-4">
+      <div class="flex-1">
+        <h2 class="mb-4">Fichas</h2>
+      </div>
 
       <div>
-        <button
-          mat-button
-          class="btn-laranja py-2 px-4"
-          (click)="novaFicha()">
+        <button mat-button class="btn-laranja py-2 px-4" (click)="novaFicha()">
           <mat-icon class="mr-2">add</mat-icon>
           Nova Ficha
         </button>
       </div>
 
-  </div>
+    </div>
 
-  <table mat-table [dataSource]="fichas" class="mat-elevation-z2 striped-table">
+    <table mat-table [dataSource]="fichas" class="mat-elevation-z2 striped-table">
 
-    <ng-container matColumnDef="aluno">
-      <th mat-header-cell *matHeaderCellDef> Aluno </th>
-      <td mat-cell *matCellDef="let ficha"> {{ ficha.aluno?.nome }} </td>
-    </ng-container>
+      <ng-container matColumnDef="aluno">
+        <th mat-header-cell *matHeaderCellDef> Aluno </th>
+        <td mat-cell *matCellDef="let ficha"> {{ ficha.aluno?.nome }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="dataCriacao">
-      <th mat-header-cell *matHeaderCellDef> Criada em </th>
-      <td mat-cell *matCellDef="let ficha"> {{ ficha.dataCriacao | date:'shortDate' }} </td>
-    </ng-container>
+      <ng-container matColumnDef="dataCriacao">
+        <th mat-header-cell *matHeaderCellDef> Criada em </th>
+        <td mat-cell *matCellDef="let ficha"> {{ ficha.dataCriacao | date:'shortDate' }} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="acoes">
-      <th mat-header-cell *matHeaderCellDef> Ações </th>
-      <td mat-cell *matCellDef="let ficha">
-        <div class="d-flex gap-2">
-          <button class="btn-laranja" matTooltip="Editar"
-            (click)="editar(ficha.id!)"><mat-icon>edit</mat-icon></button>
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef> Ações </th>
+        <td mat-cell *matCellDef="let ficha">
+          <div class="d-flex gap-2">
+            <button class="btn-laranja" matTooltip="Editar"
+              (click)="editar(ficha.id!)"><mat-icon>edit</mat-icon></button>
 
-          <button class="btn-vermelho" matTooltip="Excluir"
-            (clicou)="excluir(ficha.id!)"><mat-icon>delete</mat-icon></button>
-        </div>
-      </td>
-    </ng-container>
+            <button class="btn-vermelho" matTooltip="Excluir"
+              (clicou)="excluir(ficha.id!)"><mat-icon>delete</mat-icon></button>
+          </div>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-    <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
-  </table>
-  <ng-template #noData>
-    <app-no-data-table [icon]="'fitness_center'"></app-no-data-table>
-  </ng-template>
-</mat-card>
+      <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+      <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+    </table>
+    <ng-template #noData>
+      <app-no-data-table [icon]="'fitness_center'"></app-no-data-table>
+    </ng-template>
+  </mat-card>
+</div>

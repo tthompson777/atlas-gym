@@ -11,7 +11,7 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
 import { FinanceiroListaComponent } from './financeiro/pages/lista/lista.component';
 import { FinanceiroEditarComponent } from './financeiro/pages/editar/editar.component';
 import { FinanceiroNovoComponent } from './financeiro/pages/novo/novo.component';
-import { FichaExerciciosComponent } from './ficha-exercicios/ficha-exercicios.component';
+import { FichaExerciciosComponent } from './ficha-exercicios/criar-editar/ficha-exercicios.component';
 import { FichaExerciciosListaComponent } from './ficha-exercicios/lista/lista.component';
 
 export const routes: Routes = [

@@ -595,6 +595,11 @@ button {
   color: white !important;
   border-left: 10px solid #f44336 !important;
 }
+.snack-toastr .mdc-snackbar__surface {
+  background-color: transparent !important;
+  border-left: 0 solid transparent !important;
+  box-shadow: none !important;
+}
 
 .mdc-snackbar__surface {
   border-left: 10px solid #e37a1f !important;

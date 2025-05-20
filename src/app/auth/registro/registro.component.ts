@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-registro',
@@ -17,7 +18,7 @@ export class RegistroComponent {
   confirmarSenha = '';
   erro = '';
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router, private toast: ToastService,) {}
 
   async registrar() {
     this.erro = '';
@@ -30,7 +31,7 @@ export class RegistroComponent {
       const cred = await createUserWithEmailAndPassword(this.auth, this.email, this.senha);
       await updateProfile(cred.user, { displayName: this.nome });
 
-      alert('Usuário registrado com sucesso!');
+      this.toast.show('Usuário registrado com sucesso!', 'sucesso');
       this.router.navigate(['/login']);
     } catch (err: any) {
       this.erro = err.message || 'Erro ao registrar.';

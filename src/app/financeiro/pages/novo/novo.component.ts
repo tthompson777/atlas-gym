@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BotaoComponent } from '../../../shared/botao/botao.component';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-financeiro-novo',
@@ -51,7 +52,7 @@ export class FinanceiroNovoComponent {
     'Outras Despesas'
   ];
 
-  constructor() {
+  constructor(private toast: ToastService,) {
     this.form = this.fb.group({
     tipo: ['Entrada', Validators.required],
     categoria: ['', Validators.required],
@@ -82,7 +83,7 @@ export class FinanceiroNovoComponent {
 
     this.service.criar(transacao).subscribe({
       next: () => this.router.navigate(['/financeiro']),
-      error: (err) => alert('Erro ao salvar: ' + (err?.error?.mensagem || err.message))
+      error: (err) => this.toast.show(`Erro ao salvar: ${err?.error?.mensagem || err.message}`, 'erro')
     });
   }
 
