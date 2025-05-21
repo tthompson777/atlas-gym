@@ -2,6 +2,12 @@
     <img *ngIf="data.foto" [src]="data.foto" class="foto mr-3" />
     <div>
         <p class="title"><strong>Olá, {{ data.nome }}!</strong></p>
-        <p class="desc">{{ data.mensagem }}</p>
+        <!-- <p class="desc">{{ data.mensagem }}</p> -->
+        <p *ngIf="segundosRestantes !== null" class="desc">
+        Aguarde {{ segundosRestantes }} segundo{{ segundosRestantes === 1 ? '' : 's' }} para nova verificação.
+        </p>
+        <p *ngIf="segundosRestantes === null" class="desc">
+        {{ mensagem }}
+        </p>
     </div>
 </div>

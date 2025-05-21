@@ -131,15 +131,7 @@ export class ListaComponent implements OnInit {
       data: { foto },
       panelClass: 'foto-preview-dialog',
       hasBackdrop: false,
-      position: { top: '200px', left: '200px' }
     });
-  }
-
-  fecharPreview() {
-    if (this.hoverDialogRef) {
-      this.hoverDialogRef.close();
-      this.hoverDialogRef = null;
-    }
   }
 
 }

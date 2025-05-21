@@ -41,6 +41,8 @@ export class FaceVerificationComponent implements OnInit {
   alunoReconhecido: Aluno | null = null;
   modelosCarregados = false;
   alunoInativo = false;
+  ultimoAlunoReconhecidoId: string | null = null;
+  ultimoReconhecimentoTimestamp: number | null = null;
 
   constructor(
     private face: FaceRecognitionService,
@@ -89,12 +91,12 @@ export class FaceVerificationComponent implements OnInit {
         clearInterval(intervalo);
         this.contadorProximoAluno = null;
         this.alunoReconhecido = null;
+        this.ultimoAlunoReconhecidoId = null;
         this.verificacaoAutomaticaAtiva = false;
         this.iniciarVerificacaoAutomatica();
       }
     }, 1000);
   }
-
 
   iniciarVerificacaoAutomatica() {
     if (this.verificacaoAutomaticaAtiva || this.alunoReconhecido || this.contadorProximoAluno !== null) return;
@@ -108,11 +110,9 @@ export class FaceVerificationComponent implements OnInit {
       }
 
       const video = this.videoRef.nativeElement;
-
       const detection = await this.face.detectFace(video);
 
       if (detection) {
-
         const entradaDescriptor = detection.descriptor;
         let menorDistancia = 1;
         let alunoMaisProvavel: Aluno | null = null;
@@ -126,51 +126,170 @@ export class FaceVerificationComponent implements OnInit {
         }
 
         if (alunoMaisProvavel) {
-          this.verificacaoAutomaticaAtiva = false;
-          this.alunoReconhecido = alunoMaisProvavel;
+          // Verifica no backend se esse aluno teve um acesso há menos de 1 minuto
+          this.face.verificarUltimoAcesso(alunoMaisProvavel.id).subscribe((res) => {
+            if (!res.permitido) {
+              // Acesso recente — exibe snackbar com segundos restantes
+              this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+                data: {
+                  nome: alunoMaisProvavel!.nome,
+                  foto: alunoMaisProvavel!.fotoBase64,
+                  mensagem: `Aguarde ${res.segundosRestantes} segundo${res.segundosRestantes === 1 ? '' : 's'} para verificar novamente!`
+                },
+                duration: 4000,
+                panelClass: ['snack-centralizado', 'snack-danger']
+              });
+              return;
+            }
 
-          const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';
-
-          const snackRef = this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
-            data: {
-              nome: alunoMaisProvavel.nome,
-              foto: alunoMaisProvavel.fotoBase64,
-              mensagem: alunoLiberado
-                ? 'Tudo certo!'
-                : 'Procure o atendimento para mais informações!'
-            },
-            duration: 6000,
-            panelClass: [
-              'snack-centralizado',
-              alunoLiberado ? 'snack-liberado' : 'snack-danger'
-            ]
-          });
-
-          // Quando o snackbar desaparecer, reinicia a verificação
-          snackRef.afterDismissed().subscribe(() => {
-            this.alunoReconhecido = null;
+            // Acesso permitido — segue com o fluxo de boas-vindas
             this.verificacaoAutomaticaAtiva = false;
-            this.iniciarVerificacaoAutomatica();
-            this.iniciarContadorReinicio();
-          });
+            this.alunoReconhecido = alunoMaisProvavel;
 
+            const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';
 
-          if (alunoLiberado) {
-            this.alunosService.registrarAcesso(alunoMaisProvavel.id).subscribe({
-              next: (res: any) => {
-                if (res.tipo === 'entrada') {
-                  console.log(`Entrada registrada às ${new Date(res.registro.dataEntrada).toLocaleTimeString()}`);
-                } else {
-                  console.log(`Saída registrada às ${new Date(res.registro.dataSaida).toLocaleTimeString()}`);
-                }
+            const snackRef = this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+              data: {
+                nome: alunoMaisProvavel.nome,
+                foto: alunoMaisProvavel.fotoBase64,
+                mensagem: alunoLiberado
+                  ? 'Tudo certo!'
+                  : 'Procure o atendimento para mais informações!'
               },
-              error: err => console.error('Erro ao registrar acesso:', err)
+              duration: 6000,
+              panelClass: [
+                'snack-centralizado',
+                alunoLiberado ? 'snack-liberado' : 'snack-danger'
+              ]
             });
-          }
+
+            // Reinicia após o snackbar desaparecer
+            snackRef.afterDismissed().subscribe(() => {
+              this.alunoReconhecido = null;
+              this.verificacaoAutomaticaAtiva = false;
+              this.iniciarVerificacaoAutomatica();
+              this.iniciarContadorReinicio();
+            });
+
+            // Registra acesso no banco, se liberado
+            if (alunoLiberado) {
+              this.alunosService.registrarAcesso(alunoMaisProvavel.id).subscribe({
+                next: (res: any) => {
+                  const hora = res.tipo === 'entrada'
+                    ? new Date(res.registro.dataEntrada).toLocaleTimeString()
+                    : new Date(res.registro.dataSaida).toLocaleTimeString();
+                  console.log(`${res.tipo === 'entrada' ? 'Entrada' : 'Saída'} registrada às ${hora}`);
+                },
+                error: err => console.error('Erro ao registrar acesso:', err)
+              });
+            }
+          });
         }
       }
-    }, 1000); // tenta a cada 1 segundo
+    }, 1000); // roda a cada 1 segundo
   }
+
+
+
+  // iniciarVerificacaoAutomatica() {
+  //   if (this.verificacaoAutomaticaAtiva || this.alunoReconhecido || this.contadorProximoAluno !== null) return;
+
+  //   this.verificacaoAutomaticaAtiva = true;
+
+  //   const intervalo = setInterval(async () => {
+  //     if (!this.verificacaoAutomaticaAtiva || this.alunoReconhecido || this.contadorProximoAluno !== null) {
+  //       clearInterval(intervalo);
+  //       return;
+  //     }
+
+  //     const video = this.videoRef.nativeElement;
+
+  //     const detection = await this.face.detectFace(video);
+
+  //     if (detection) {
+
+  //       const entradaDescriptor = detection.descriptor;
+  //       let menorDistancia = 1;
+  //       let alunoMaisProvavel: Aluno | null = null;
+
+  //       for (const registro of this.descriptorsSalvos) {
+  //         const dist = this.face.computeDistance(entradaDescriptor, registro.descriptor);
+  //         if (dist < menorDistancia && dist < 0.6) {
+  //           menorDistancia = dist;
+  //           alunoMaisProvavel = registro.aluno;
+  //         }
+  //       }
+
+  //       this.ultimoAlunoReconhecidoId = String(alunoMaisProvavel?.id);
+  //       this.ultimoReconhecimentoTimestamp = Date.now();
+
+  //       if (alunoMaisProvavel) {
+  //         // Se o aluno reconhecido for o mesmo que o último, informa a ele que ele já foi reconhecido
+  //         if (
+  //           this.ultimoAlunoReconhecidoId === String(alunoMaisProvavel.id) &&
+  //           this.ultimoReconhecimentoTimestamp &&
+  //           Date.now() - this.ultimoReconhecimentoTimestamp < 60000
+  //         ) {
+  //           const segundosRestantes = Math.ceil((60000 - (Date.now() - this.ultimoReconhecimentoTimestamp)) / 1000);
+
+  //           this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+  //             data: {
+  //               nome: alunoMaisProvavel.nome,
+  //               foto: alunoMaisProvavel.fotoBase64,
+  //               mensagem: `Aguarde ${segundosRestantes} segundos para nova verificação.`
+  //             },
+  //             duration: 3000,
+  //             panelClass: ['snack-centralizado', 'snack-danger']
+  //           });
+
+  //           return;
+  //         }
+
+  //         this.verificacaoAutomaticaAtiva = false;
+  //         this.alunoReconhecido = alunoMaisProvavel;
+
+  //         const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';
+
+  //         const snackRef = this.snackBar.openFromComponent(BoasVindasSnackbarComponent, {
+  //           data: {
+  //             nome: alunoMaisProvavel.nome,
+  //             foto: alunoMaisProvavel.fotoBase64,
+  //             mensagem: alunoLiberado
+  //               ? 'Tudo certo!'
+  //               : 'Procure o atendimento para mais informações!'
+  //           },
+  //           duration: 6000,
+  //           panelClass: [
+  //             'snack-centralizado',
+  //             alunoLiberado ? 'snack-liberado' : 'snack-danger'
+  //           ]
+  //         });
+
+  //         // Quando o snackbar desaparecer, reinicia a verificação
+  //         snackRef.afterDismissed().subscribe(() => {
+  //           this.alunoReconhecido = null;
+  //           this.verificacaoAutomaticaAtiva = false;
+  //           this.iniciarVerificacaoAutomatica();
+  //           this.iniciarContadorReinicio();
+  //         });
+
+
+  //         if (alunoLiberado) {
+  //           this.alunosService.registrarAcesso(alunoMaisProvavel.id).subscribe({
+  //             next: (res: any) => {
+  //               if (res.tipo === 'entrada') {
+  //                 console.log(`Entrada registrada às ${new Date(res.registro.dataEntrada).toLocaleTimeString()}`);
+  //               } else {
+  //                 console.log(`Saída registrada às ${new Date(res.registro.dataSaida).toLocaleTimeString()}`);
+  //               }
+  //             },
+  //             error: err => console.error('Erro ao registrar acesso:', err)
+  //           });
+  //         }
+  //       }
+  //     }
+  //   }, 1000); // tenta a cada 1 segundo
+  // }
 
 
   reiniciarVerificacao() {
@@ -203,7 +322,15 @@ export class FaceVerificationComponent implements OnInit {
       }
     }
 
+    this.ultimoAlunoReconhecidoId = String(alunoMaisProvavel?.id);
+
     if (alunoMaisProvavel) {
+      if (this.ultimoAlunoReconhecidoId == String(alunoMaisProvavel.id)) {
+        console.log('Aluno já reconhecido recentemente!');
+        this.toast.show('Aluno já reconhecido recentemente!', 'aviso');
+        return;
+      }
+
       this.alunoReconhecido = alunoMaisProvavel;
 
       const alunoLiberado = alunoMaisProvavel.status?.toLowerCase() === 'ativo';

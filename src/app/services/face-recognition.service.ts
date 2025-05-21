@@ -1,8 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as faceapi from 'face-api.js';
 
 @Injectable({ providedIn: 'root' })
 export class FaceRecognitionService {
+  private API_URL = 'http://localhost:3000/api';
+
+  constructor(private http: HttpClient) { }
+
   async loadModels(): Promise<void> {
     await faceapi.nets.tinyFaceDetector.loadFromUri('/assets/models/tiny_face_detector');
     await faceapi.nets.faceLandmark68Net.loadFromUri('/assets/models/face_landmark_68');
@@ -19,5 +24,10 @@ export class FaceRecognitionService {
   computeDistance(desc1: Float32Array, desc2: Float32Array): number {
     return faceapi.euclideanDistance(desc1, desc2);
   }
+
+  verificarUltimoAcesso(alunoId: number) {
+    return this.http.get<{ permitido: boolean, segundosRestantes?: number }>(`${this.API_URL}/registro-acesso/verificar-ultimo/${alunoId}`);
+  }
+
 }
 

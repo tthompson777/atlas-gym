@@ -27,9 +27,8 @@
       <ng-container matColumnDef="foto">
         <th mat-header-cell *matHeaderCellDef> Foto </th>
         <td mat-cell *matCellDef="let aluno">
-          <img *ngIf="aluno.fotoBase64" [src]="aluno.fotoBase64" alt="Foto" width="48" height="48"
-            style="border-radius: 4px; cursor: zoom-in;" (mouseenter)="abrirPreview(aluno.fotoBase64)"
-            (mouseleave)="fecharPreview()" />
+          <img *ngIf="aluno.fotoBase64" [src]="aluno.fotoBase64" alt="Foto" width="48" height="48" matTooltip="Clique para ver a foto"
+            style="border-radius: 4px; cursor: pointer;" (click)="abrirPreview(aluno.fotoBase64)" />
         </td>
       </ng-container>
 
@@ -87,14 +86,14 @@
 
             <button
               matTooltip="Inativar"
-              class="btn-cancelar mr-2"
+              class="btn-cancelar"
               (click)="inativar(aluno.id)">
               <mat-icon>close</mat-icon>
             </button>
 
             <button
               matTooltip="Excluir"
-              class="btn-vermelho mr-2"
+              class="btn-vermelho"
               (click)="excluir(aluno.id)">
               <mat-icon>delete</mat-icon>
             </button>
