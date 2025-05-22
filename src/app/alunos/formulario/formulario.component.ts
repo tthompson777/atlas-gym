@@ -55,7 +55,8 @@ export class FormularioComponent implements OnInit {
     bairro: '',
     cidade: '',
     pais: '',
-    status: 'Ativo',
+    status: 'Pendente',
+    criadoEm: ''
   };
 
   editando = false;
@@ -103,8 +104,13 @@ export class FormularioComponent implements OnInit {
       return;
     }
 
-    if (!this.editando && !this.aluno.senha) {
+    if (!this.aluno.senha) {
       this.mostrarMensagem('Crie uma senha de acesso para o aluno.');
+      return;
+    }
+
+    if (!this.aluno.cpf || !this.aluno.nome || !this.aluno.sexo || !this.aluno.nascimento || !this.aluno.senha) {
+      this.mostrarMensagem('Preencha todos os campos obrigatórios.'); 
       return;
     }
 

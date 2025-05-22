@@ -339,7 +339,7 @@ export class FaceVerificationComponent implements OnInit {
         data: {
           nome: alunoMaisProvavel.nome,
           foto: alunoMaisProvavel.fotoBase64,
-          mensagem: alunoMaisProvavel.status?.toLowerCase() === 'inativo'
+          mensagem: alunoMaisProvavel.status?.toLowerCase() === 'inativo' || alunoMaisProvavel.status?.toLowerCase() === 'pendente'
             ? 'Procure o atendimento para mais informações!'
             : 'Tudo certo!!'
         },

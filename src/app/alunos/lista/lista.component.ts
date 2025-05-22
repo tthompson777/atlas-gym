@@ -17,11 +17,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { FaceRecognitionService } from '../../services/face-recognition.service';
 import { FotoPreviewComponent } from '../../shared/foto-preview/foto-preview.component';
 import { NoDataTableComponent } from "../../shared/no-data-table/no-data-table.component";
+import { TagStatusComponent } from '../../shared/tag-status/tag-status.component';
 
 @Component({
   selector: 'app-alunos',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, NoDataTableComponent],
+  imports: [CommonModule, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, TagStatusComponent, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, NoDataTableComponent],
   templateUrl: './lista.component.html',
 })
 export class ListaComponent implements OnInit {

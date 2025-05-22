@@ -1,0 +1,24 @@
+.tag-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+
+    &.status-ativo {
+        background-color: #4caf50;
+        color: #fff;
+    }
+
+    &.status-inativo {
+        background-color: #f44336;
+        color: #fff;
+    }
+
+    &.status-pendente {
+        background-color: #ff9800;
+        color: #fff;
+    }
+}
