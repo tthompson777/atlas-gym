@@ -18,7 +18,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 @Component({
   selector: 'app-financeiro-lista',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, NoDataTableComponent],
+  imports: [CommonModule, RouterModule, MatTooltipModule, MatIconModule, MatCardModule, MatTableModule, MatTooltipModule, MatPaginator, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule, NoDataTableComponent],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
@@ -69,4 +69,18 @@ export class FinanceiroListaComponent {
         }
       });
     }
+
+    gerarPagamento(id: number): void {
+    this.service.gerarPagamento(id).subscribe({
+      next: (res) => {
+        if (res.paymentLink) {
+          window.open(res.paymentLink, '_blank');
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao gerar pagamento:', err);
+        alert('Erro ao gerar link de pagamento.');
+      }
+    });
+  }
 }

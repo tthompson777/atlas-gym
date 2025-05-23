@@ -29,4 +29,8 @@ atualizar(id: number, dados: Transacao): Observable<Transacao> {
   return this.http.put<Transacao>(`${this.api}/${id}`, dados);
 }
 
+gerarPagamento(id: number) {
+  return this.http.post<{ paymentLink: string }>(`${this.api}/${id}/gerar-pagamento`, {});
+}
+
 }

@@ -6,4 +6,5 @@ export interface Transacao {
   descricao?: string;
   dataHora?: string;
   alunoId?: number;
+  statusPagamento: string;
 }

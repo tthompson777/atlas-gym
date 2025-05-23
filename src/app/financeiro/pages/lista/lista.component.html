@@ -56,11 +56,19 @@
               <mat-icon>edit</mat-icon>
             </button>
 
+            <!-- Botão Pagar -->
+            <button mat-icon-button color="accent"
+                    *ngIf="t.tipo === 'Entrada' && t.statusPagamento !== 'Pago'" matTooltip="Gerar pagamento"
+                    (click)="gerarPagamento(t.id)">
+              <mat-icon>attach_money</mat-icon>
+            </button>
+
             <button class="btn-vermelho"
               matTooltip="Excluir"
               (click)="excluir(t.id)">
               <mat-icon>delete</mat-icon>
             </button>
+            
           </div>
         </td>
       </ng-container>
