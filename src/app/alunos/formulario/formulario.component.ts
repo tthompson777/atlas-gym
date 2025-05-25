@@ -120,6 +120,7 @@ export class FormularioComponent implements OnInit {
       this.mostrarMensagem('Não foi possível identificar o rosto na imagem. Tente novamente.');
       return;
     }
+    delete this.aluno.criadoEm;
 
     this.aluno.descriptor = Array.from(descriptor);
 

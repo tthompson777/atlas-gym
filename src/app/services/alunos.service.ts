@@ -17,7 +17,7 @@ export interface Aluno {
   pais?: string;
   descriptor?: number[];
   status: 'Ativo' | 'Inativo' | 'Pendente';
-  criadoEm: string;
+  criadoEm?: string;
   senha?: string;
 }
 
