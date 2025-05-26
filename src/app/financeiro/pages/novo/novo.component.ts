@@ -11,20 +11,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BotaoComponent } from '../../../shared/botao/botao.component';
 import { ToastService } from '../../../services/toast.service';
+import { LoadingComponent } from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-financeiro-novo',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatCardModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatSelectModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     ReactiveFormsModule,
     BotaoComponent,
-  ],
+    LoadingComponent
+],
   templateUrl: './novo.component.html',
   styleUrls: ['./novo.component.scss']
 })
@@ -35,6 +37,7 @@ export class FinanceiroNovoComponent {
   private alunosService = inject(AlunosService);
   alunos: Aluno[] = [];
   categoriasQueRequeremAluno = ['Mensalidade', 'Matrícula', 'Avaliação Física'];
+  isLoading = false;
 
   form: FormGroup;
 
@@ -77,12 +80,16 @@ export class FinanceiroNovoComponent {
 }
 
   salvar(): void {
+    this.isLoading = true;
     if (this.form.invalid) return;
 
     const transacao: Transacao = this.form.value;
 
     this.service.criar(transacao).subscribe({
-      next: () => this.router.navigate(['/financeiro']),
+      next: () => {
+        this.isLoading = false;
+        this.voltar();
+      },
       error: (err) => this.toast.show(`Erro ao salvar: ${err?.error?.mensagem || err.message}`, 'erro')
     });
   }

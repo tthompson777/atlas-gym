@@ -11,20 +11,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlunosService, Aluno } from '../../../services/alunos.service';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastService } from '../../../services/toast.service';
+import { LoadingComponent } from "../../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-financeiro-editar',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatCardModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatSelectModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     ReactiveFormsModule,
     MatIconModule,
-  ],
+    LoadingComponent
+],
   templateUrl: './editar.component.html',
   styleUrls: ['./editar.component.scss']
 })
@@ -39,6 +41,7 @@ export class FinanceiroEditarComponent implements OnInit {
   categoriasQueRequeremAluno = ['Mensalidade', 'Matrícula', 'Avaliação Física'];
   form: FormGroup;
   transacaoId!: number;
+  isLoading = false;
 
   categoriasEntrada: string[] = [
     'Mensalidade', 'Matrícula', 'Avaliação Física',
@@ -95,12 +98,16 @@ export class FinanceiroEditarComponent implements OnInit {
   }
 
   salvar(): void {
+    this.isLoading = true;
     if (this.form.invalid) return;
 
     const dadosAtualizados: Transacao = this.form.value;
 
     this.service.atualizar(this.transacaoId, dadosAtualizados).subscribe({
-      next: () => this.router.navigate(['/financeiro']),
+      next: () => {
+        this.isLoading = false;
+        this.voltar();
+      },
       error: (err) => this.toast.show(`${err?.error?.mensagem || err.message}`, 'erro')
     });
   }

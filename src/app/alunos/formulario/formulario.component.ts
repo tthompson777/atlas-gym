@@ -15,6 +15,7 @@ import { NgIf } from '@angular/common';
 import { WebcamModule } from 'ngx-webcam';
 import { MatSnackBar } from '@angular/material/snack-bar'
 import * as faceapi from 'face-api.js';
+import { LoadingComponent } from '../../shared/loading/loading.component';
 
 @Component({
   selector: 'app-formulario',
@@ -32,6 +33,7 @@ import * as faceapi from 'face-api.js';
     FormsModule,
     ReactiveFormsModule,
     WebcamModule,
+    LoadingComponent,
   ],
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss'],
@@ -40,6 +42,7 @@ export class FormularioComponent implements OnInit {
   trigger: Subject<void> = new Subject<void>();
   webcamImage?: WebcamImage;
   triggerObservable: Observable<void> = this.trigger.asObservable();
+  isLoading = false;
 
   aluno: Aluno = {
     fotoBase64: '',
@@ -99,17 +102,22 @@ export class FormularioComponent implements OnInit {
   }
 
   async salvar() {
+    this.isLoading = true;
+
     if (!this.aluno.fotoBase64) {
       this.mostrarMensagem('Por favor, capture uma foto do aluno antes de salvar.');
+      this.isLoading = false;
       return;
     }
 
     if (!this.aluno.senha) {
+      this.isLoading = false;
       this.mostrarMensagem('Crie uma senha de acesso para o aluno.');
       return;
     }
 
     if (!this.aluno.cpf || !this.aluno.nome || !this.aluno.sexo || !this.aluno.nascimento || !this.aluno.senha) {
+      this.isLoading = false;
       this.mostrarMensagem('Preencha todos os campos obrigatórios.'); 
       return;
     }
@@ -117,6 +125,7 @@ export class FormularioComponent implements OnInit {
     // Aguarda imagem carregar corretamente no DOM para geração do descriptor
     const descriptor = await this.gerarDescriptor(this.aluno.fotoBase64);
     if (!descriptor) {
+      this.isLoading = false;
       this.mostrarMensagem('Não foi possível identificar o rosto na imagem. Tente novamente.');
       return;
     }
@@ -130,9 +139,11 @@ export class FormularioComponent implements OnInit {
 
     request.subscribe({
       next: () => {
+        this.isLoading = false;
         this.router.navigate(['/alunos']);
       },
       error: (err) => {
+        this.isLoading = false;
         const msg = err?.error?.mensagem ?? 'Erro ao salvar aluno.';
         this.mostrarMensagem(msg);
       }

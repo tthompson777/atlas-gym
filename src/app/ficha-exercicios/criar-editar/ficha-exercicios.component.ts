@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FichaDialogComponent } from '../../shared/dialog-ficha/ficha-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastService } from '../../services/toast.service';
+import { LoadingComponent } from "../../shared/loading/loading.component";
 
 @Component({
   selector: 'app-ficha-exercicios',
@@ -37,7 +38,8 @@ import { ToastService } from '../../services/toast.service';
     ReactiveFormsModule,
     MatSelectModule,
     MatTooltipModule,
-  ],
+    LoadingComponent
+],
   templateUrl: './ficha-exercicios.component.html',
   styleUrl: './ficha-exercicios.component.scss'
 })
@@ -58,6 +60,7 @@ export class FichaExerciciosComponent {
   formFicha: FormGroup = new FormGroup({});
   fichaId?: number;
   editando = false;
+  isLoading = false;
 
   grupos = [
   {
@@ -194,6 +197,8 @@ preencherDadosAluno() {
 }
 
 salvarFicha() {
+  this.isLoading = true;
+
   if (this.formFicha.invalid) {
     this.toast.show('Preencha todos os campos obrigatórios!', 'erro');
 
@@ -242,8 +247,9 @@ salvarFicha() {
   } else {
     this.fichaService.criar(ficha).subscribe({
       next: () => {
+        this.isLoading = false;
         this.toast.show('Ficha criada com sucesso!', 'sucesso');
-        this.router.navigate(['/fichas']);
+        this.voltar();
       },
       error: (err) => {
         console.error('Erro ao criar ficha:', err);
