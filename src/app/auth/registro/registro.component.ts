@@ -4,6 +4,7 @@ import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fi
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../services/toast.service';
+import { EmpresaService } from '../../services/empresa.service';
 
 @Component({
   selector: 'app-registro',
@@ -18,7 +19,7 @@ export class RegistroComponent {
   confirmarSenha = '';
   erro = '';
 
-  constructor(private auth: Auth, private router: Router, private toast: ToastService,) {}
+  constructor(private auth: Auth, private router: Router, private toast: ToastService, private empresaService: EmpresaService) {}
 
   async registrar() {
     this.erro = '';
@@ -30,6 +31,12 @@ export class RegistroComponent {
     try {
       const cred = await createUserWithEmailAndPassword(this.auth, this.email, this.senha);
       await updateProfile(cred.user, { displayName: this.nome });
+
+      await this.empresaService.cadastrar({
+        nome: this.nome,
+        email: this.email,
+        uid: cred.user.uid,
+      }).toPromise();
 
       this.toast.show('Usuário registrado com sucesso!', 'sucesso');
       this.router.navigate(['/login']);

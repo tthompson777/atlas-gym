@@ -1,0 +1,21 @@
+<div class="container">
+  <mat-card class="p-4 m-h-70 mt-5 bg-white bg-white-transparent-8 card-border-orange">
+    <h2 class="mb-4">Cadastro da Empresa</h2>
+
+    <form [formGroup]="form">
+      <mat-form-field class="w-100 mb-3">
+        <mat-label>Nome da Empresa</mat-label>
+        <input matInput formControlName="nome">
+      </mat-form-field>
+
+      <mat-form-field class="w-100 mb-3">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email">
+      </mat-form-field>
+
+      <button class="btn-laranja px-4" [disabled]="form.invalid" (click)="salvar()">
+        <mat-icon class="mr-2">save</mat-icon> Salvar
+      </button>
+    </form>
+  </mat-card>
+</div>

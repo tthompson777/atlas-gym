@@ -13,10 +13,15 @@ import { FinanceiroEditarComponent } from './financeiro/pages/editar/editar.comp
 import { FinanceiroNovoComponent } from './financeiro/pages/novo/novo.component';
 import { FichaExerciciosComponent } from './ficha-exercicios/criar-editar/ficha-exercicios.component';
 import { FichaExerciciosListaComponent } from './ficha-exercicios/lista/lista.component';
+import { EmpresaNovaComponent } from './empresa/pages/nova/empresa-nova.component';
+import { EmpresaListaComponent } from './empresa/pages/lista/empresa-lista.component';
+import { AdminLayoutComponent } from './layouts/adm/admin-layout.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'admin', component: AdminLayoutComponent, },
+  // TODO: adicionar superAdminGuard futuramente
 
   {
     path: '',
@@ -32,11 +37,17 @@ export const routes: Routes = [
       { path: 'financeiro', component: FinanceiroListaComponent },
       { path: 'financeiro/novo', component: FinanceiroNovoComponent },
       { path: 'financeiro/editar/:id', component: FinanceiroEditarComponent },
-      
+
       // 👇 Rotas Ficha de Exercícios
       { path: 'fichas', component: FichaExerciciosListaComponent },
       { path: 'fichas/nova', component: FichaExerciciosComponent },
       { path: 'fichas/editar/:id', component: FichaExerciciosComponent },
+
+      // 👇 Rotas Empresa
+      { path: 'empresa/nova', component: EmpresaNovaComponent },
+
+      // ADM Empresas
+      { path: 'admin/empresas', component: EmpresaListaComponent }
     ]
   },
 

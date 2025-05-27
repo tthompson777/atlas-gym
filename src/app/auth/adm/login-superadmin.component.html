@@ -1,0 +1,20 @@
+<div class="container max-w-500 mt-5">
+  <mat-card class="p-4">
+    <h2 class="mb-4">Login Superadmin</h2>
+
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <mat-form-field class="w-100 mb-3">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field class="w-100 mb-3">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="senha">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Entrar</button>
+      <div *ngIf="erro" class="text-danger mt-2">{{ erro }}</div>
+    </form>
+  </mat-card>
+</div>
