@@ -16,10 +16,12 @@ import { FichaExerciciosListaComponent } from './ficha-exercicios/lista/lista.co
 import { EmpresaNovaComponent } from './empresa/pages/nova/empresa-nova.component';
 import { EmpresaListaComponent } from './empresa/pages/lista/empresa-lista.component';
 import { AdminLayoutComponent } from './layouts/adm/admin-layout.component';
+import { RegistroComponent } from './auth/registro/registro.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent }, 
   { path: 'admin', component: AdminLayoutComponent, },
   // TODO: adicionar superAdminGuard futuramente
 

@@ -1,13 +1,10 @@
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { importProvidersFrom } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,12 +19,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPtBrPaginatorIntl } from './app/shared/mat-paginator-intl-pt';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TokenInterceptor } from './app/core/interceptors/token.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     importProvidersFrom(FormsModule, ReactiveFormsModule),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(

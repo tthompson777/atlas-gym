@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+const URL_API = environment.URL;
 
 export interface Exercicio {
   grupo: string;
@@ -24,7 +27,7 @@ export interface FichaExercicio {
   providedIn: 'root'
 })
 export class FichaExercicioService {
-  private readonly API = 'http://localhost:3000/api/fichas';
+  private readonly API = `${URL_API}/fichas`;
 
   constructor(private http: HttpClient) {}
 

@@ -1,8 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { FirebaseTokenInterceptor } from './core/interceptors/firebase-token.interceptor';
+import { TokenInterceptor } from './core/interceptors/token.interceptor';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -14,8 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
-import { NgClass, NgIf } from '@angular/common';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +34,7 @@ import { filter } from 'rxjs/operators';
     MatListModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: FirebaseTokenInterceptor, multi: true, }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, }
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

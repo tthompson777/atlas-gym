@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+
+const API_URL = environment.URL;
 
 export interface Aluno {
   fotoBase64: string;
@@ -23,7 +26,7 @@ export interface Aluno {
 
 @Injectable({ providedIn: 'root' })
 export class AlunosService {
-  private API = 'http://localhost:3000/api/alunos';
+  private API = `${API_URL}/alunos`
 
   constructor(private http: HttpClient) { }
 
@@ -51,11 +54,11 @@ export class AlunosService {
     return this.http.patch<Aluno>(`${this.API}/${id}/inativar`, {});
   }
 
-  registrarAcesso(alunoId: number) {
-    return this.http.post('http://localhost:3000/api/registro-acesso', { alunoId });
+  registrarAcesso(userId: number) {
+    return this.http.post(`${API_URL}/registro-acesso`, userId);
   }
 
   autenticarPorSenha(senha: string) {
-    return this.http.post<Aluno>('http://localhost:3000/api/alunos/autenticar-senha', { senha });
+    return this.http.post<Aluno>(`${API_URL}/alunos/autenticar-senha`, { senha });
   }
 }

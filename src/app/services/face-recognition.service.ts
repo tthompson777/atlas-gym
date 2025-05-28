@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as faceapi from 'face-api.js';
+import { environment } from '../../environments/environment';
+
+const URL_API = environment.URL;
 
 @Injectable({ providedIn: 'root' })
 export class FaceRecognitionService {
-  private API_URL = 'http://localhost:3000/api';
+  private API_URL = `${URL_API}`;
 
   constructor(private http: HttpClient) { }
 

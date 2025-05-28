@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
+const URL_API = environment.URL;
 
 interface Empresa {
   id: string;
@@ -18,11 +21,11 @@ export interface NovaEmpresa {
 @Injectable({ providedIn: 'root' })
 export class EmpresaService {
   constructor(private http: HttpClient) {}
-  private readonly API = 'http://localhost:3000/api/empresas';
+  private readonly API = `${URL_API}/empresas`;
 
-  buscarPorUid(uid: string): Observable<Empresa> {
-    return this.http.get<Empresa>(`${this.API}/by-uid/${uid}`);
-  }
+  buscarMinhaEmpresa(): Observable<Empresa> {
+  return this.http.get<Empresa>(`${this.API}/minha`);
+}
 
   cadastrar(empresa: NovaEmpresa): Observable<Empresa> {
     return this.http.post<Empresa>(this.API, empresa);

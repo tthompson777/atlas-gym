@@ -1,5 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
-import { Auth, onAuthStateChanged, User, signOut } from '@angular/fire/auth';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,24 +7,23 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  private auth = inject(Auth);
   private router = inject(Router);
 
-  user = signal<User | null>(null);
+  token = signal(localStorage.getItem('token'));
+  nome = signal(localStorage.getItem('nome') || 'Usuário');
 
-  constructor() {
-    onAuthStateChanged(this.auth, (u) => this.user.set(u));
-  }
+  nomeUsuario = computed(() => this.nome());
 
   ngOnInit(): void {
-    this.auth.currentUser?.getIdToken().then(token => {
-      console.log('Token JWT:', token);
-    });
+    // Opcional: buscar dados atualizados do usuário
+    // Exemplo:
+    // this.http.get('/api/me').subscribe({ next: (u: any) => this.nome.set(u.nome) })
   }
 
-  nomeUsuario = computed(() => this.user()?.displayName ?? this.user()?.email ?? 'Usuário');
-
   logout() {
-    signOut(this.auth).then(() => this.router.navigate(['/login']));
+    localStorage.removeItem('token');
+    localStorage.removeItem('empresaId');
+    localStorage.removeItem('nome'); // se estiver armazenando
+    this.router.navigate(['/login']);
   }
 }

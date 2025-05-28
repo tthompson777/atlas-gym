@@ -1,19 +1,13 @@
+// src/app/guards/auth.guard.ts
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
-export const authGuard: CanActivateFn = async () => {
-  const auth = inject(Auth);
+export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
+  const token = localStorage.getItem('token');
 
-  const isAuthenticated = await new Promise<boolean>((resolve) => {
-    onAuthStateChanged(auth, (user) => {
-      resolve(!!user);
-    });
-  });
-
-  if (!isAuthenticated) {
+  if (!token) {
     router.navigate(['/login']);
     return false;
   }

@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
+const URL_API = environment.URL;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private auth: Auth) {}
+  constructor(private http: HttpClient) {}
 
   login(email: string, senha: string) {
-    return signInWithEmailAndPassword(this.auth, email, senha);
+    return this.http.post<{ token: string }>(`${URL_API}/login`, { email, senha }).pipe(
+      tap(res => localStorage.setItem('token', res.token))
+    );
   }
 
   logout() {
-    return signOut(this.auth);
+    localStorage.removeItem('token');
   }
 
-  getUsuarioAtual(): User | null {
-    return this.auth.currentUser;
+  getToken() {
+    return localStorage.getItem('token');
   }
 }
