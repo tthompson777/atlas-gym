@@ -99,8 +99,8 @@ mat-paginator {
 }
 
 thead tr {
-  background: #c9c9c9 !important;
-  color: #2e2e2e !important;
+  background: #151b26 !important;
+  color: #fff !important;
   font-weight: bold !important;
   text-transform: uppercase;
   height: 40px !important;
@@ -632,6 +632,12 @@ button {
   background-repeat: no-repeat;
   background-size: 450px auto;
 }
+.bg-frequencia {
+  background-image: url('/assets/bg-freq.png');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 450px auto;
+}
 
 .box-shadow-none {
   box-shadow: none !important;
@@ -669,5 +675,16 @@ mat-sidenav .mdc-list-item__primary-text {
   &:hover{
     background-color: #e37a1f !important;
     color: #fff !important;
+  }
+}
+
+
+table {
+  tr:nth-child(even) {
+    background-color: #fff3ea; // cor para linhas pares
+  }
+
+  tr:nth-child(odd) {
+    background-color: #ffffff; // cor para linhas ímpares (opcional)
   }
 }

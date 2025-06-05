@@ -17,6 +17,7 @@ import { EmpresaNovaComponent } from './empresa/pages/nova/empresa-nova.componen
 import { EmpresaListaComponent } from './empresa/pages/lista/empresa-lista.component';
 import { AdminLayoutComponent } from './layouts/adm/admin-layout.component';
 import { RegistroComponent } from './auth/registro/registro.component';
+import { FrequenciaComponent } from './frequencias/frequencia.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -34,6 +35,7 @@ export const routes: Routes = [
       { path: 'alunos', component: ListaComponent },
       { path: 'alunos/novo', component: FormularioComponent },
       { path: 'alunos/editar/:id', component: FormularioComponent },
+      { path: 'alunos/frequencia/:id', component: FrequenciaComponent },
 
       // 👇 Rotas do Financeiro
       { path: 'financeiro', component: FinanceiroListaComponent },

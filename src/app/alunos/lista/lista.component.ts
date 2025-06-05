@@ -135,4 +135,8 @@ export class ListaComponent implements OnInit {
     });
   }
 
+  verFrequencia(id: number) {
+  this.router.navigate(['/alunos/frequencia', id]);
+}
+
 }

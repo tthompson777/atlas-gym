@@ -85,6 +85,13 @@
             </button>
 
             <button
+              matTooltip="Frequência"
+              class="btn-azul"
+              (click)="verFrequencia(aluno.id)">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+
+            <button
               matTooltip="Inativar"
               class="btn-cancelar"
               (click)="inativar(aluno.id)">

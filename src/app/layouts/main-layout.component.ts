@@ -61,4 +61,8 @@ export class MainLayoutComponent {
   isAlunoNovoPage() {
     return this.router.url === '/alunos/novo';
   }
+
+  isFrequenciaPage() {
+    return this.router.url.includes('alunos/frequencia');
+  }
 }

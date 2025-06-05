@@ -54,9 +54,13 @@ export class AlunosService {
     return this.http.patch<Aluno>(`${this.API}/${id}/inativar`, {});
   }
 
-  registrarAcesso(userId: number) {
-    return this.http.post(`${API_URL}/registro-acesso`, userId);
-  }
+  // registrarAcesso(userId: number) {
+  //   return this.http.post(`${API_URL}/registro-acesso`, userId);
+  // }
+
+  registrarAcesso(alunoId: number) {
+  return this.http.post<any>(`${API_URL}/registro-acesso`, { alunoId });
+}
 
   autenticarPorSenha(senha: string) {
     return this.http.post<Aluno>(`${API_URL}/alunos/autenticar-senha`, { senha });
